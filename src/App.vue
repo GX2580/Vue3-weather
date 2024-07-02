@@ -80,8 +80,8 @@
               <span>周五</span><span>07-05</span><span>小雨</span><span>风力1-3级</span>
             </div>
           </div>
-          <div class="weathercanvas h-40 mt-10">
-            <div></div>
+          <div class="weathercanvas h-60 mt-6">
+            <div id="weatherChart" style="width: 100%; height: 100%;"></div>
           </div>
         </div>
       </main>
@@ -111,6 +111,85 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted, ref } from 'vue';
+import * as echarts from 'echarts';
 
-<style scoped></style>
+const weatherData = ref([
+  { date: '07-02', dayTemp: 29, nightTemp: 21 },
+  { date: '07-03', dayTemp: 31, nightTemp: 25 },
+  { date: '07-04', dayTemp: 36, nightTemp: 26 },
+  { date: '07-05', dayTemp: 35, nightTemp: 27 },
+]);
+
+onMounted(() => {
+  const chartDom = document.getElementById('weatherChart');
+  const myChart = echarts.init(chartDom);
+  
+  const option = {
+    grid: {
+      top: '15%',
+      left: '3%',
+      right: '4%',
+      bottom: '10%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: weatherData.value.map(item => item.date),
+      axisLabel: {
+        color: '#ffffff'
+      },
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      }
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {
+        color: '#ffffff'
+      },
+      splitLine: {
+        lineStyle: {
+          color: '#ffffff'
+        }
+      }
+    },
+    series: [
+      {
+        name: '白天温度',
+        type: 'line',
+        data: weatherData.value.map(item => item.dayTemp),
+        smooth: true,
+        itemStyle: {
+          color: '#ffa500'
+        }
+      },
+      {
+        name: '夜间温度',
+        type: 'line',
+        data: weatherData.value.map(item => item.nightTemp),
+        smooth: true,
+        itemStyle: {
+          color: '#00bfff'
+        }
+      }
+    ],
+    backgroundColor: 'transparent'
+  };
+
+  myChart.setOption(option);
+
+  // 响应式调整
+  window.addEventListener('resize', () => {
+    myChart.resize();
+  });
+});
+</script>
+
+<style scoped>
+/* 如果需要任何特定的样式，可以在这里添加 */
+</style>
