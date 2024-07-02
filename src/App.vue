@@ -1,14 +1,14 @@
 <template>
-  <div id="app">
-    <div class="flex flex-col min-h-screen bg-weather-primary">
+  <div id="app" >
+    <div class="flex flex-col min-h-screen bg-weather-primary ">
       <header class="bg-weather-primary shadow-lg sticky top-0 z-10">
         <nav
           class="container flex flex-col sm:flex-row items-center gap-4 text-white py-6"
         >
-          <router-link to="/weather" aria-current="page">
+          <router-link to="/weather" aria-current="page" class="ml-60">
             <div class="flex items-center gap-3">
               <i class="fa-solid fa-sun text-2xl"></i>
-              <p class="text-2xl">新中地天气</p>
+              <p class="text-2xl ">新中地天气</p>
             </div>
           </router-link>
           <div class="flex gap-4 items-center">
@@ -23,7 +23,7 @@
           </div>
         </nav>
       </header>
-      <main class="container text-white">
+      <main class="container text-white flex ">
         <div class="pt-4 mb-8 relative">
           <input
             type="text"
@@ -48,7 +48,7 @@
               <h3>武汉市</h3>
               <span>30度</span>
             </div>
-            <div class="flex mb-4 gap-2" style="display: block">
+            <div class="flex mb-4 gap-2" style="display: none">
               <button class="bg-yellow-500 text-center w-[80px]">查看</button>
               <button class="bg-yellow-500 text-center w-[80px]">删除</button>
             </div>
@@ -64,7 +64,7 @@
               <h3>安庆市</h3>
               <span>26度</span>
             </div>
-            <div class="flex mb-4 gap-2" style="display: block">
+            <div class="flex mb-4 gap-2" style="display: none">
               <button class="bg-yellow-500 text-center w-[80px]">查看</button>
               <button class="bg-yellow-500 text-center w-[80px]">删除</button>
             </div>
