@@ -135,28 +135,13 @@ onMounted(() => {
       containLabel: true
     },
     xAxis: {
+      show: false,
       type: 'category',
-      data: weatherData.value.map(item => item.date),
-      axisLabel: {
-        color: '#ffffff'
-      },
-      axisLine: {
-        show: false
-      },
-      axisTick: {
-        show: false
-      }
+      data: weatherData.value.map(item => item.date)
     },
     yAxis: {
-      type: 'value',
-      axisLabel: {
-        color: '#ffffff'
-      },
-      splitLine: {
-        lineStyle: {
-          color: '#ffffff'
-        }
-      }
+      show: false,
+      type: 'value'
     },
     series: [
       {
@@ -166,6 +151,11 @@ onMounted(() => {
         smooth: true,
         itemStyle: {
           color: '#ffa500'
+        },
+        label: {
+          show: true,
+          formatter: (params) => `白${params.value}℃`,
+          color: '#ffffff'
         }
       },
       {
@@ -175,6 +165,11 @@ onMounted(() => {
         smooth: true,
         itemStyle: {
           color: '#00bfff'
+        },
+        label: {
+          show: true,
+          formatter: (params) => `夜${params.value}℃`,
+          color: '#ffffff'
         }
       }
     ],
