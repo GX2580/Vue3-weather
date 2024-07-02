@@ -2,30 +2,28 @@
   <div id="app">
     <div class="flex flex-col min-h-screen bg-weather-primary">
       <header class="bg-weather-primary shadow-lg sticky top-0 z-10">
-        <nav
-          class="container flex flex-col sm:flex-row items-center gap-4 text-white py-6"
-        >
-          <router-link to="/weather" aria-current="page" >
-            <div class="flex items-center gap-3">
-              <i class="fa-solid fa-sun text-2xl"></i>
-              <p class="text-2xl">新中地天气</p>
+        <nav class="w-4/5 mx-auto flex items-center justify-between gap-4 text-white py-6">
+          <div class="flex items-center gap-8">
+            <router-link to="/weather" aria-current="page">
+              <div class="flex items-center gap-3">
+                <i class="fa-solid fa-sun text-2xl"></i>
+                <p class="text-2xl">新中地天气</p>
+              </div>
+            </router-link>
+            <div class="flex gap-4 items-center">
+              <h4 class="text-lg">武汉市</h4>
+              <span class="text-sm">实时天气:阴 29℃</span>
+              <span class="text-sm">西风≤3级</span>
             </div>
-          </router-link>
-          <div class="flex gap-4 items-center">
-            <h4 class="text-lg">武汉市</h4>
-            <span class="text-sm">实时天气:阴 29℃</span>
-            <span class="text-sm">西风≤3级</span>
           </div>
-          <div class="flex gap-3 flex-1 justify-end">
-            <i
-              class="fa-solid fa-circle-info text-xl hover:text-weather-secondary cursor-pointer duration-1000"
-            ></i>
+          <div>
+            <i class="fa-solid fa-circle-info text-xl hover:text-weather-secondary cursor-pointer duration-1000"></i>
           </div>
         </nav>
       </header>
 
-      <main class="container mx-w-5xl text-white flex flex-col items-center px-4">
-        <div class="w-full max-w-2xl pt-4 mb-8 relative">
+      <main class="w-4/5 mx-auto text-white flex flex-col items-center">
+        <div class="w-full pt-4 mb-8 relative">
           <input
             type="text"
             placeholder="请输入城市名称"
@@ -40,11 +38,9 @@
           </ul>
         </div>
         
-        <div class="w-full max-w-2xl mt-10 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300">
+        <div class="w-full mt-10 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300">
           <div class="flex justify-between">
-            <div
-              class="mb-4 bg-weather-secondary py-4 flex justify-between cursor-pointer w-full duration-300"
-            >
+            <div class="mb-4 bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300">
               <h3>武汉市</h3>
               <span>30度</span>
             </div>
@@ -55,11 +51,9 @@
           </div>
         </div>
         
-        <div class="w-full max-w-2xl mt-10 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300">
+        <div class="w-full mt-10 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300">
           <div class="flex justify-between">
-            <div
-              class="mb-4 bg-weather-secondary py-4 flex justify-between cursor-pointer w-full duration-300"
-            >
+            <div class="mb-4 bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300">
               <h3>安庆市</h3>
               <span>26度</span>
             </div>
@@ -70,8 +64,8 @@
           </div>
         </div>
         
-        <h2 class="mt-6 w-full max-w-2xl">近期天气</h2>
-        <div class="w-full max-w-2xl bg-weather-secondary px-12 pt-10 mt-2 rounded">
+        <h2 class="mt-6 w-full">近期天气</h2>
+        <div class="w-full bg-weather-secondary px-12 pt-10 mt-2 rounded">
           <div class="flex gap-6">
             <div class="flex flex-col flex-1 text-center gap-4">
               <span>今天</span><span>07-02</span><span>小雨</span><span>风力1-3级</span>

@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.5.2",
+    "echarts": "^5.5.1",
     "pinia": "^2.1.7",
     "reset-css": "^5.0.2",
     "vue": "^3.4.29",
+    "vue-echarts": "^6.7.3",
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
