@@ -2,7 +2,7 @@
   <div id="app">
     <div class="flex flex-col min-h-screen bg-weather-primary">
       <header class="bg-weather-primary shadow-lg sticky top-0 z-10">
-        <nav class="w-2/3 mx-auto flex items-center justify-between gap-4 text-white py-8">
+        <nav class="w-3/4 mx-auto flex items-center justify-between gap-4 text-white py-8">
           <div class="flex items-center gap-6">
             <router-link to="/weather" aria-current="page">
               <div class="flex items-center gap-3">
@@ -22,7 +22,7 @@
         </nav>
       </header>
 
-      <main class="w-2/3 mx-auto text-white flex flex-col items-center">
+      <main class="w-3/4 mx-auto text-white flex flex-col items-center">
         <div class="w-full pt-4 mb-6 relative"> 
           <input
             type="text"
@@ -50,6 +50,14 @@
             </div>
             <div class="mb-4 text-xl bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300">
               <h3>安庆市</h3>
+              <span>26度</span>
+            </div>
+            <div class="flex mb-4 gap-2" style="display: none">
+              <button class="bg-yellow-500 text-center w-[80px]">查看</button>
+              <button class="bg-yellow-500 text-center w-[80px]">删除</button>
+            </div>
+            <div class="mb-4 text-xl bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300">
+              <h3>大庆市</h3>
               <span>26度</span>
             </div>
             <div class="flex mb-4 gap-2" style="display: none">
