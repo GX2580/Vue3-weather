@@ -17,28 +17,25 @@
           <div
             v-for="city in cities"
             :key="city.name"
-            class="mb-4 text-xl bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300 relative group"
+            class="mb-4 text-xl bg-weather-secondary py-4 px-5 flex items-center cursor-pointer w-full duration-300 relative group overflow-hidden"
           >
-            <h3
-              class="transition-all duration-300 ease-in-out group-hover:mr-16"
-            >
-              {{ city.name }}
-            </h3>
-            <span
-              class="transition-all duration-300 ease-in-out group-hover:mr-16"
-              >{{ city.temp }}度</span
-            >
             <div
-              class="absolute right-0 top-0 bottom-0 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
+              class="flex justify-between w-full transition-all duration-300 ease-in-out group-hover:w-[calc(100%-170px)]"
+            >
+              <h3>{{ city.name }}</h3>
+              <span>{{ city.temp }}度</span>
+            </div>
+            <div
+              class="absolute right-0 top-0 bottom-0 flex items-center gap-2 transition-all duration-300 ease-in-out translate-x-full group-hover:translate-x-0"
             >
               <button
-                class="bg-yellow-500 text-center w-[80px]"
+                class="bg-yellow-500 text-center w-[80px] py-2 rounded"
                 @click="viewCity(city.name)"
               >
                 查看
               </button>
               <button
-                class="bg-yellow-500 text-center w-[80px]"
+                class="bg-yellow-500 text-center w-[80px] py-2 rounded"
                 @click="deleteCity(city.name)"
               >
                 删除
@@ -106,9 +103,15 @@ function showInfoModal() {
 
 function viewCity(cityName) {
   // 实现查看城市的逻辑
+  console.log('查看城市:', cityName)
 }
 
 function deleteCity(cityName) {
   // 实现删除城市的逻辑
+  console.log('删除城市:', cityName)
 }
 </script>
+
+<style scoped>
+/* 如果需要任何特定的样式，可以在这里添加 */
+</style>
