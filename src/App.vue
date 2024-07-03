@@ -12,7 +12,7 @@
             </router-link>
             <div class="flex gap-3 items-center">
               <h4 class="text-2xl">武汉市</h4>
-              <span class="text-lg">实时天气:阴 29℃</span>
+              <span class="text-lg ">实时天气:阴 29℃</span>
               <span class="text-lg">西风≤3级</span>
             </div>
           </div>
@@ -75,8 +75,8 @@
               <span>周五</span><span>07-05</span><span>小雨</span><span>风力1-3级</span>
             </div>
           </div>
-          <div class="weathercanvas h-60 mt-6">
-            <div id="weatherChart" style="width: 100%; height: 100%;"></div>
+          <div class="weathercanvas h-80 mt-6">
+            <div id="weatherChart" class="w-full h-full"></div>
           </div>
         </div>
       </main>
@@ -124,7 +124,7 @@ onMounted(() => {
   const option = {
     grid: {
       top: '15%',
-      left: '3%',
+      left: '0%',
       right: '4%',
       bottom: '10%',
       containLabel: true
@@ -150,7 +150,8 @@ onMounted(() => {
         label: {
           show: true,
           formatter: (params) => `白${params.value}℃`,
-          color: '#ffffff'
+          color: '#ffffff',
+          fontSize:15
         }
       },
       {
@@ -164,7 +165,9 @@ onMounted(() => {
         label: {
           show: true,
           formatter: (params) => `夜${params.value}℃`,
-          color: '#ffffff'
+          color: '#ffffff',
+          fontSize:15,
+          position:'bottom'
         }
       }
     ],
