@@ -4,8 +4,8 @@
 
     <!-- Info Modal -->
     <div
-      v-if="showInfo"
-      class="fixed z-20 w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center px-8 text-black"
+      v-if="infoStore.showInfo"
+      class="fixed z-20 w-full bg-black bg-opacity-30 h-screen top-9 left-0 flex justify-center px-8 text-black"
     >
       <div class="p-4 bg-white self-start mt-32 max-w-screen-md">
         <h2>关于:</h2>
@@ -34,11 +34,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useInfoStore } from '@/stores/infoStore'
 
-const showInfo = ref(false)
+const infoStore = useInfoStore()
 
 function closeInfo() {
-  showInfo.value = false
+  infoStore.closeInfo()
 }
 </script>
