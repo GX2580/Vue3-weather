@@ -16,10 +16,14 @@
           <span class="text-lg">{{ wind }}</span>
         </div>
       </div>
-      <div>
+      <div class="flex items-center gap-4">
         <i
           class="fa-solid fa-circle-info text-xl hover:text-weather-secondary cursor-pointer duration-1000"
           @click="toggleInfo"
+        ></i>
+        <i
+          class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"
+          style="display: none"
         ></i>
       </div>
     </nav>
