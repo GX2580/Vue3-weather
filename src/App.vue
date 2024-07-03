@@ -63,6 +63,18 @@
             </div>
           </div>
         </div>
+        <div class="w-full mt-10 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300">
+          <div class="flex justify-between">
+            <div class="mb-4 bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300">
+              <h3>安庆市</h3>
+              <span>26度</span>
+            </div>
+            <div class="flex mb-4 gap-2" style="display: none">
+              <button class="bg-yellow-500 text-center w-[80px]">查看</button>
+              <button class="bg-yellow-500 text-center w-[80px]">删除</button>
+            </div>
+          </div>
+        </div>
         
         <h2 class="mt-6 w-full">近期天气</h2>
         <div class="w-full bg-weather-secondary px-12 pt-10 mt-2 rounded">
