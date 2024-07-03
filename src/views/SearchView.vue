@@ -11,13 +11,17 @@
     <main class="w-3/4 mx-auto text-white flex flex-col items-center">
       <!-- Search input -->
       <div class="w-full pt-4 mb-6 relative">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="请输入城市名称"
-          class="py-3 px-3 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none placeholder-text-xl focus:shadow-md"
-          @input="handleSearch"
-        />
+        <div class="p-2 text-center bg-weather-secondary">
+          您正在预览青岛市的天气信息
+          <span style="display: none">,可以通过右上角的"+"号按钮保存起来</span>
+        </div>
+        <div class="container flex flex-col text-center mt-6 gap-4">
+          <h1>当日气温是:25摄氏度</h1>
+          <h1>当日天气是:多云</h1>
+          <h1>当日风向是:南风</h1>
+          <h1>当日风力是:≤3级</h1>
+        </div>
+        <hr class="border-white border-opacity-10 mt-6" />
         <ul
           v-show="false"
           class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[62px]"
