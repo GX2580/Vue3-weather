@@ -19,11 +19,11 @@
           @input="handleSearch"
         />
         <ul
-          v-show="true"
+          v-show="false"
           class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[62px]"
         >
           <p v-if="true">对不起网络似乎出了点问题 请稍后再查询</p>
-          <p v-if="true">似乎没有找到你查找的城市</p>
+          <p v-if="false">似乎没有找到你查找的城市</p>
           <li
             v-for="result in searchResults"
             :key="result.id"
