@@ -15,7 +15,7 @@
           v-model="searchQuery"
           type="text"
           placeholder="请输入城市名称"
-          class="py-3 px-3 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none placeholder-text-xl focus:shadow-md"
+          class="py-3 px-3 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none placeholder-text-3xl focus:shadow-md"
           @input="handleSearch"
         />
         <ul
@@ -150,11 +150,7 @@ function handleSearch() {
         noResults.value = true
         searchResults.value = []
       } else {
-        searchResults.value = [
-          { id: 1, name: searchQuery.value + '市' },
-          { id: 2, name: searchQuery.value + '县' },
-          { id: 3, name: '新' + searchQuery.value + '区' },
-        ]
+        searchResults.value = [{ id: 1, name: searchQuery.value + '市' }]
       }
     }, 300)
   } else {
