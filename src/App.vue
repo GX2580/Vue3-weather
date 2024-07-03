@@ -3,14 +3,14 @@
     <div class="flex flex-col min-h-screen bg-weather-primary">
       <header class="bg-weather-primary shadow-lg sticky top-0 z-10">
         <nav class="w-2/3 mx-auto flex items-center justify-between gap-4 text-white py-6">
-          <div class="flex items-center gap-8">
+          <div class="flex items-center gap-6">
             <router-link to="/weather" aria-current="page">
               <div class="flex items-center gap-3">
                 <i class="fa-solid fa-sun text-2xl"></i>
                 <p class="text-3xl ">新中地天气</p>
               </div>
             </router-link>
-            <div class="flex gap-4 items-center">
+            <div class="flex gap-3 items-center">
               <h4 class="text-2xl">武汉市</h4>
               <span class="text-lg">实时天气:阴 29℃</span>
               <span class="text-lg">西风≤3级</span>
@@ -23,7 +23,7 @@
       </header>
 
       <main class="w-2/3 mx-auto text-white flex flex-col items-center">
-        <div class="w-full pt-4 mb-8 relative">
+        <div class="w-full pt-4 mb-6 relative"> 
           <input
             type="text"
             placeholder="请输入城市名称"
@@ -38,8 +38,8 @@
           </ul>
         </div>
         
-        <div class="w-full mt-10 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300">
-          <div class="flex flex-col gap-2 "> <!-- 添加 gap 属性 -->
+        <div class="w-full mt-4 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300"> <!-- 修改了这里的 mt-10 为 mt-4 -->
+          <div class="flex flex-col gap-2"> <!-- 添加 gap 属性 -->
             <div class="mb-4 bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300">
               <h3>武汉市</h3>
               <span>30度</span>
@@ -59,9 +59,9 @@
           </div>
         </div>
         
-        <h2 class="mt-6 w-full">近期天气</h2>
+        <h2 class="mt-6 w-full text-lg ">近期天气</h2>
         <div class="w-full bg-weather-secondary px-12 pt-10 mt-2 rounded">
-          <div class="flex gap-6">
+          <div class="flex gap-6 text-lg" >
             <div class="flex flex-col flex-1 text-center gap-4">
               <span>今天</span><span>07-02</span><span>小雨</span><span>风力1-3级</span>
             </div>
