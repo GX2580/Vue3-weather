@@ -2,18 +2,18 @@
   <div id="app">
     <div class="flex flex-col min-h-screen bg-weather-primary">
       <header class="bg-weather-primary shadow-lg sticky top-0 z-10">
-        <nav class="w-4/5 mx-auto flex items-center justify-between gap-4 text-white py-6">
+        <nav class="w-2/3 mx-auto flex items-center justify-between gap-4 text-white py-6">
           <div class="flex items-center gap-8">
             <router-link to="/weather" aria-current="page">
               <div class="flex items-center gap-3">
                 <i class="fa-solid fa-sun text-2xl"></i>
-                <p class="text-2xl">新中地天气</p>
+                <p class="text-3xl ">新中地天气</p>
               </div>
             </router-link>
             <div class="flex gap-4 items-center">
-              <h4 class="text-lg">武汉市</h4>
-              <span class="text-sm">实时天气:阴 29℃</span>
-              <span class="text-sm">西风≤3级</span>
+              <h4 class="text-2xl">武汉市</h4>
+              <span class="text-lg">实时天气:阴 29℃</span>
+              <span class="text-lg">西风≤3级</span>
             </div>
           </div>
           <div>
@@ -22,12 +22,12 @@
         </nav>
       </header>
 
-      <main class="w-4/5 mx-auto text-white flex flex-col items-center">
+      <main class="w-2/3 mx-auto text-white flex flex-col items-center">
         <div class="w-full pt-4 mb-8 relative">
           <input
             type="text"
             placeholder="请输入城市名称"
-            class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-md"
+            class="py-3 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none placeholder-text-lg focus:shadow-md"
           />
           <ul
             class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[62px]"
@@ -150,7 +150,7 @@ onMounted(() => {
         data: weatherData.value.map(item => item.dayTemp),
         smooth: true,
         itemStyle: {
-          color: '#ffa500'
+          color: '#5470c6'
         },
         label: {
           show: true,
@@ -164,7 +164,7 @@ onMounted(() => {
         data: weatherData.value.map(item => item.nightTemp),
         smooth: true,
         itemStyle: {
-          color: '#00bfff'
+          color: '#91cc75'
         },
         label: {
           show: true,
