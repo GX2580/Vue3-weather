@@ -67,11 +67,23 @@ import { ref } from 'vue'
 import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
 
+const currentCity = ref('青岛市')
+const currentWeather = ref('多云')
+const currentTemp = ref(25)
+const currentWind = ref('南风≤3级')
+
 const chartData = ref({
   dates: ['07-02', '07-03', '07-04', '07-05'],
   dayTemps: [29, 31, 36, 35],
   nightTemps: [21, 25, 26, 27],
 })
+
+const recentWeather = ref([
+  { dayOfWeek: '今天', date: '07-02', weather: '多云', wind: '南风≤3级' },
+  { dayOfWeek: '明天', date: '07-03', weather: '晴', wind: '东南风3-4级' },
+  { dayOfWeek: '周四', date: '07-04', weather: '阴', wind: '东风4-5级' },
+  { dayOfWeek: '周五', date: '07-05', weather: '小雨', wind: '东北风3-4级' },
+])
 
 function showInfoModal() {
   // 实现显示信息模态框的逻辑
