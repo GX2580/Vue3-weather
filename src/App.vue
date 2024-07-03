@@ -39,7 +39,7 @@
         </div>
         
         <div class="w-full mt-10 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300">
-          <div class="flex justify-between">
+          <div class="flex flex-col gap-2 "> <!-- 添加 gap 属性 -->
             <div class="mb-4 bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300">
               <h3>武汉市</h3>
               <span>30度</span>
@@ -48,23 +48,6 @@
               <button class="bg-yellow-500 text-center w-[80px]">查看</button>
               <button class="bg-yellow-500 text-center w-[80px]">删除</button>
             </div>
-          </div>
-        </div>
-        
-        <div class="w-full mt-10 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300">
-          <div class="flex justify-between">
-            <div class="mb-4 bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300">
-              <h3>安庆市</h3>
-              <span>26度</span>
-            </div>
-            <div class="flex mb-4 gap-2" style="display: none">
-              <button class="bg-yellow-500 text-center w-[80px]">查看</button>
-              <button class="bg-yellow-500 text-center w-[80px]">删除</button>
-            </div>
-          </div>
-        </div>
-        <div class="w-full mt-10 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300">
-          <div class="flex justify-between">
             <div class="mb-4 bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300">
               <h3>安庆市</h3>
               <span>26度</span>
