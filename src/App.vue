@@ -24,7 +24,7 @@
         </p>
         <button
           @click="closeInfo"
-          class="text-white mt-8 bg-wheather-primary py-2 px-6 text-xs"
+          class="text-white mt-8 bg-weather-primary py-2 px-6 text-xs"
         >
           关闭
         </button>
