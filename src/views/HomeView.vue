@@ -17,10 +17,33 @@
           <div
             v-for="city in cities"
             :key="city.name"
-            class="mb-4 text-xl bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300"
+            class="mb-4 text-xl bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full duration-300 relative group"
           >
-            <h3>{{ city.name }}</h3>
-            <span>{{ city.temp }}度</span>
+            <h3
+              class="transition-all duration-300 ease-in-out group-hover:mr-16"
+            >
+              {{ city.name }}
+            </h3>
+            <span
+              class="transition-all duration-300 ease-in-out group-hover:mr-16"
+              >{{ city.temp }}度</span
+            >
+            <div
+              class="absolute right-0 top-0 bottom-0 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
+            >
+              <button
+                class="bg-yellow-500 text-center w-[80px]"
+                @click="viewCity(city.name)"
+              >
+                查看
+              </button>
+              <button
+                class="bg-yellow-500 text-center w-[80px]"
+                @click="deleteCity(city.name)"
+              >
+                删除
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -79,5 +102,13 @@ const chartData = ref({
 
 function showInfoModal() {
   // 实现显示信息模态框的逻辑
+}
+
+function viewCity(cityName) {
+  // 实现查看城市的逻辑
+}
+
+function deleteCity(cityName) {
+  // 实现删除城市的逻辑
 }
 </script>
