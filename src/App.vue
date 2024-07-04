@@ -2,13 +2,6 @@
   <div id="app">
     <router-view></router-view>
 
-    <!-- 添加测试按钮 -->
-    <button
-      @click="testWeatherApi"
-      class="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded"
-    >
-      测试天气 API
-    </button>
     <!-- Info Modal -->
     <div
       v-if="infoStore.showInfo"
@@ -42,25 +35,10 @@
 
 <script setup>
 import { useInfoStore } from '@/stores/infoStore'
-import { getWeather, searchCity } from '@/api/weatherApi'
+
 const infoStore = useInfoStore()
 
 function closeInfo() {
   infoStore.closeInfo()
-}
-
-// 添加测试方法
-async function testWeatherApi() {
-  try {
-    // 测试获取天气数据
-    const weatherResponse = await getWeather('北京')
-    console.log('Weather Data:', weatherResponse.data)
-
-    // 测试城市搜索
-    const searchResponse = await searchCity('上海')
-    console.log('City Search Results:', searchResponse.data)
-  } catch (error) {
-    console.error('API 测试失败:', error)
-  }
 }
 </script>
