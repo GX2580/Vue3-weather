@@ -11,19 +11,22 @@ const weatherApi = axios.create({
   },
 })
 
+// 获取位置信息
 export const getLocationInfo = () => {
-  return weatherApi.get('/ip') // 获取位置信息
+  return weatherApi.get('/ip')
 }
 
+// 获取天气信息
 export const getWeather = (adcode) => {
   return weatherApi.get('/weather/weatherInfo', {
     params: {
       city: adcode, // 城市代码
-      extensions: 'base', // 请求基本天气信息
+      extensions: 'all', // 请求所有天气信息
     },
   })
 }
 
+// 搜索城市
 export const searchCity = (keywords) => {
   return weatherApi.get('/place/text', {
     params: {

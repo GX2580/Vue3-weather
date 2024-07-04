@@ -1,3 +1,4 @@
+// src/views/HomeView.vue
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <Header />
@@ -36,7 +37,7 @@
         <div class="flex flex-col gap-2">
           <div
             v-for="city in cities"
-            :key="city.name"
+            :key="city.adcode"
             class="mb-4 text-xl relative group"
           >
             <div
@@ -56,7 +57,7 @@
               </button>
               <button
                 class="bg-yellow-500 text-center w-[100px] py-4 px-5"
-                @click.stop="deleteCity(city.name)"
+                @click.stop="deleteCity(city.adcode)"
               >
                 删除
               </button>
@@ -70,14 +71,14 @@
       <div class="w-full bg-weather-secondary px-12 pt-10 mt-2 rounded">
         <div class="flex gap-6 text-lg">
           <div
-            v-for="day in recentWeather"
-            :key="day.date"
+            v-for="(day, index) in currentWeather"
+            :key="index"
             class="flex flex-col flex-1 text-center gap-4"
           >
-            <span>{{ day.dayOfWeek }}</span>
+            <span>{{ getDayOfWeek(index) }}</span>
             <span>{{ day.date }}</span>
-            <span>{{ day.weather }}</span>
-            <span>{{ day.wind }}</span>
+            <span>{{ day.dayweather }}</span>
+            <span> 风力:{{ day.daywind }} {{ day.daypower }} </span>
           </div>
         </div>
         <div class="weathercanvas h-80 mt-6">
@@ -89,9 +90,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
+import { getLocationInfo, getWeather } from '@/api/weatherApi'
 
 const searchQuery = ref('')
 const showSearchResults = ref(false)
@@ -99,26 +101,31 @@ const searchResults = ref([])
 const networkError = ref(false)
 const noResults = ref(false)
 
-const cities = ref([
-  { name: '武汉市', temp: 30 },
-  { name: '安庆市', temp: 26 },
-  { name: '大庆市', temp: 26 },
-])
+const cities = ref([]) // 使用 ref([]) 初始化 cities
 
-const recentWeather = ref([
-  { dayOfWeek: '今天', date: '07-02', weather: '小雨', wind: '风力1-3级' },
-  { dayOfWeek: '明天', date: '07-03', weather: '小雨', wind: '风力1-3级' },
-  { dayOfWeek: '周四', date: '07-04', weather: '小雨', wind: '风力1-3级' },
-  { dayOfWeek: '周五', date: '07-05', weather: '小雨', wind: '风力1-3级' },
-])
+const currentWeather = ref([]) // 使用 ref([]) 初始化 currentWeather
 
 const chartData = ref({
-  dates: ['07-02', '07-03', '07-04', '07-05'],
-  dayTemps: [29, 31, 36, 35],
-  nightTemps: [21, 25, 26, 27],
+  dates: [],
+  dayTemps: [],
+  nightTemps: [],
 })
+// 获取今天是周几
+const getDayOfWeek = (index) => {
+  const daysOfWeek = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+  const today = new Date().getDay()
+  const calculatedIndex = (today + index) % 7
+  if (index === 0) {
+    return '今天'
+  } else if (index === 1) {
+    return '明天'
+  } else {
+    return daysOfWeek[calculatedIndex]
+  }
+}
 
-/* function handleSearch() {
+// 处理搜索逻辑
+const handleSearch = () => {
   // 这里应该实现实际的搜索逻辑
   // 模拟搜索过程
   showSearchResults.value = true
@@ -141,24 +148,57 @@ const chartData = ref({
   } else {
     showSearchResults.value = false
   }
-} */
+}
 
-function selectCity(city) {
+// 处理城市选择逻辑
+const selectCity = (city) => {
   // 处理城市选择逻辑
   showSearchResults.value = false
   searchQuery.value = ''
   // 这里应该触发获取所选城市天气数据的逻辑
 }
 
-function viewCity(cityName) {
+// 查看城市天气
+const viewCity = (cityName) => {
   // 实现查看城市的逻辑
   console.log('查看城市:', cityName)
 }
-
-function deleteCity(cityName) {
+// 删除城市
+const deleteCity = (adcode) => {
   // 实现删除城市的逻辑
-  console.log('删除城市:', cityName)
+  // 根据 adcode 从 cities 中删除对应的城市
+  cities.value = cities.value.filter((city) => city.adcode !== adcode)
 }
+// 初始化页面，加载默认城市天气信息
+onMounted(async () => {
+  try {
+    const res = await getLocationInfo() // 获取位置信息
+    const adcode = res.data.adcode
+    const weatherRes = await getWeather(adcode) // 获取天气信息
+    const forecasts = weatherRes.data.forecasts[0].casts // 获取预报信息
+
+    // 更新 cities 数据
+    cities.value = [
+      {
+        name: weatherRes.data.forecasts[0].city,
+        temp: forecasts[0].daytemp, // 使用当天白天温度
+        adcode: weatherRes.data.forecasts[0].adcode, // 添加 adcode 属性
+      },
+    ]
+
+    // 更新 currentWeather 数据
+    currentWeather.value = forecasts
+
+    // 更新 chartData 数据
+    chartData.value = {
+      dates: forecasts.map((item) => item.date),
+      dayTemps: forecasts.map((item) => item.daytemp),
+      nightTemps: forecasts.map((item) => item.nighttemp),
+    }
+  } catch (error) {
+    console.error('获取天气信息失败：', error)
+  }
+})
 </script>
 
 <style scoped>
