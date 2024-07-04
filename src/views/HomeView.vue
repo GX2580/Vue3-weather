@@ -1,3 +1,4 @@
+// src/stores/weatherStore.js // ... (store 代码保持不变) // 组件部分
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <Header />
@@ -12,31 +13,31 @@
           class="py-3 px-3 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none placeholder-text-3xl focus:shadow-md"
           @input="handleSearch"
         />
-        <ul
+        <!-- 搜索结果列表 -->
+        <div
           v-show="showSearchResults"
           class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[62px]"
         >
           <p v-if="networkError">对不起网络似乎出了点问题 请稍后再查询</p>
-          <p v-if="!networkError && searchResults.length === 0">
-            似乎没有找到你查找的城市
-          </p>
-          <li
-            v-for="result in searchResults"
-            :key="result.adcode"
-            @click="handleCitySelect(result)"
+          <p v-if="!networkError && !searchResult">似乎没有找到你查找的城市</p>
+          <div
+            v-if="searchResult"
+            @click="handleCitySelect(searchResult)"
             class="cursor-pointer hover:bg-weather-primary p-2"
           >
-            {{ result.name }}
-          </li>
-        </ul>
+            {{ searchResult.name }}
+          </div>
+        </div>
       </div>
-      <h2 v-if="true" class="text-center duration-200">
-        暂时没有保存过城市天气信息，请查询后点击右上角"+"号保存。
-      </h2>
-      <!-- City list -->
+
+      <!-- 城市列表 -->
       <div
+        v-show="!showSearchResults"
         class="w-full mt-4 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300"
       >
+        <h2 v-if="cities.length === 0" class="text-center duration-200">
+          暂时没有保存过城市天气信息，请查询后点击右上角"+"号保存。
+        </h2>
         <div class="flex flex-col gap-2">
           <div
             v-for="city in cities"
@@ -70,8 +71,8 @@
       </div>
 
       <!-- Recent weather -->
-      <h2 class="mt-6 w-full text-lg">近期天气</h2>
       <div class="w-full bg-weather-secondary px-12 pt-10 mt-2 rounded">
+        <h2 class="mt-6 w-full text-lg">近期天气</h2>
         <div class="flex gap-6 text-lg">
           <div
             v-for="(day, index) in currentWeather"
@@ -103,14 +104,14 @@ import { useWeatherStore } from '@/stores/weatherStore'
 
 const weatherStore = useWeatherStore()
 
-const searchQuery = ref('')
-const showSearchResults = ref(false)
-const searchResults = ref([])
-const networkError = ref(false)
+const searchQuery = ref('') // 搜索关键词
+const showSearchResults = ref(false) // 是否显示搜索结果
+const searchResult = ref(null) // 搜索结果
+const networkError = ref(false) // 是否出现网络错误
 
 // 获取天气数据
-const cities = computed(() => weatherStore.cities)
-const currentWeather = computed(() => weatherStore.currentWeather)
+const cities = computed(() => weatherStore.cities) // 城市列表
+const currentWeather = computed(() => weatherStore.currentWeather) // 当前城市天气预报
 
 // 使用 computed 计算当前城市的 chartData
 const currentCityChartData = computed(() => {
@@ -166,7 +167,7 @@ const getLiveTemp = (adcode) => {
   }
   return 'N/A' // 如果没有找到城市，返回 N/A
 }
-
+// 处理搜索逻辑
 const handleSearch = async () => {
   if (searchQuery.value === '') {
     showSearchResults.value = false
@@ -175,9 +176,8 @@ const handleSearch = async () => {
   showSearchResults.value = true
   networkError.value = false
   try {
-    const results = await weatherStore.searchCity(searchQuery.value)
-    // 修改searchResults 为当前行政区数据
-    searchResults.value = results
+    const result = await weatherStore.searchCity(searchQuery.value)
+    searchResult.value = result[0]
   } catch (error) {
     networkError.value = true
     console.error('搜索城市时出错:', error)
@@ -210,3 +210,7 @@ onMounted(async () => {
   await weatherStore.initialize()
 })
 </script>
+
+<style scoped>
+/* ... (样式代码保持不变) */
+</style>
