@@ -11,7 +11,10 @@
             <p class="text-3xl">新中地天气</p>
           </div>
         </router-link>
-        <div v-if="!weatherStore.loading" class="flex gap-3 items-center">
+        <div
+          v-if="!weatherStore.loading"
+          class="flex gap-3 items-center text-3xl"
+        >
           <h4 class="text-2xl">{{ weatherStore.city }}</h4>
           <span class="text-lg">
             实时天气: {{ weatherStore.liveWeather.weather }}
