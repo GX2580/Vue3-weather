@@ -50,6 +50,7 @@ import { onMounted, computed } from 'vue'
 import { useInfoStore } from '@/stores/infoStore'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useRoute } from 'vue-router'
+import { searchCityByAdcode } from '@/api/weatherApi'
 
 const infoStore = useInfoStore()
 const weatherStore = useWeatherStore()
@@ -58,19 +59,16 @@ const route = useRoute()
 // 计算属性，判断是否显示添加按钮
 const showAddButton = computed(() => {
   // 只在 /weather/:adcode 路由下并且城市不存在时显示
-  // 获取路由名称
   const routeName = route.name
-  if (routeName === 'weather' && !cityExistsInStore()) {
+  if (routeName === 'weather' && !cityExistsInStore(route.params.adcode)) {
     return true
   }
   return false
 })
 
 // 判断城市是否已经存在于 store 中
-function cityExistsInStore() {
-  return weatherStore.cities.some(
-    (city) => city.adcode === weatherStore.liveWeather.adcode
-  )
+function cityExistsInStore(adcode) {
+  return weatherStore.cities.some((city) => city.adcode === adcode)
 }
 
 function toggleInfo() {
@@ -79,14 +77,22 @@ function toggleInfo() {
 
 // 添加城市到 store
 async function addCity() {
-  // 在此处获取当前路由参数中的 adcode
   const adcode = route.params.adcode
-  //  调用 weatherStore 的 addCity 方法
-  await weatherStore.addCity({
-    name: weatherStore.liveWeather.city,
-    adcode: adcode, // 使用路由参数中的 adcode
-    temp: weatherStore.liveWeather.temperature,
-  })
+
+  try {
+    // 根据 adcode 获取城市信息
+    const res = await searchCityByAdcode(adcode)
+    console.log(res)
+    const cityName = res.data.districts[0].name
+
+    await weatherStore.addCity({
+      name: cityName,
+      adcode: adcode,
+      temp: weatherStore.liveWeather.temperature,
+    })
+  } catch (error) {
+    console.error('添加城市时出错:', error)
+  }
 }
 
 onMounted(() => {

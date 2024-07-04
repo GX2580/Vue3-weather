@@ -131,10 +131,9 @@ watch(cities, async () => {
   // 遍历 cities，为每个城市更新实时天气
   for (const city of cities.value) {
     try {
-      const res = await weatherStore.setLiveWeatherData(city.adcode)
+      const liveWeather = await weatherStore.setLiveWeatherData(city.adcode)
       // 使用获取到的实时天气更新 city.temp
-      const liveTemp = res.liveWeather.temperature
-      city.temp = liveTemp
+      city.temp = liveWeather.temperature
     } catch (error) {
       console.error('更新城市天气信息时出错:', error)
     }

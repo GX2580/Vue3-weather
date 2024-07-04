@@ -55,3 +55,16 @@ export const searchCity = (keywords) => {
     },
   })
 }
+
+// 根据 adcode 搜索城市
+export const searchCityByAdcode = (adcode) => {
+  return weatherApi.get('/config/district', {
+    params: {
+      // 使用 adcode 进行搜索
+      districts: adcode,
+      // 获取当前行政区
+      subdistrict: 0,
+      extensions: 'base',
+    },
+  })
+}
