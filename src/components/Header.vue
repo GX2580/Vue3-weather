@@ -34,12 +34,12 @@
 import { defineProps } from 'vue'
 import { useInfoStore } from '@/stores/infoStore'
 
-const props = defineProps({
+/* const props = defineProps({
   city: String,
   weather: String,
   temperature: Number,
   wind: String,
-})
+}) */
 
 const infoStore = useInfoStore()
 
