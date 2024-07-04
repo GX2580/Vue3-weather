@@ -1,4 +1,4 @@
-// src/views/SearchView.vue
+<!-- src/views/SearchView.vue -->
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <Header />
@@ -26,14 +26,14 @@
       <div class="w-full bg-weather-secondary px-12 pt-10 mt-2 rounded">
         <div class="flex gap-6 text-lg">
           <div
-            v-for="day in recentWeather"
-            :key="day.date"
+            v-for="(day, index) in currentWeather"
+            :key="index"
             class="flex flex-col flex-1 text-center gap-4"
           >
-            <span>{{ day.dayOfWeek }}</span>
-            <span>{{ day.date }}</span>
-            <span>{{ day.weather }}</span>
-            <span>{{ day.wind }}</span>
+            <span>{{ weatherStore.getDayOfWeek(index) }}</span>
+            <span>{{ weatherStore.formatDate(day.date) }}</span>
+            <span>{{ day.dayweather }}</span>
+            <span> 风力:{{ weatherStore.formatWind(day.daypower) }} </span>
           </div>
         </div>
         <div class="weathercanvas h-80 mt-6">
@@ -61,7 +61,7 @@ const chartData = ref({
   nightTemps: [],
 })
 
-const recentWeather = ref([])
+const currentWeather = computed(() => weatherStore.currentWeather)
 const liveWeather = ref({})
 
 // 获取天气数据
@@ -83,13 +83,6 @@ onMounted(async () => {
       dayTemps: weatherStore.currentWeather.map((item) => item.daytemp),
       nightTemps: weatherStore.currentWeather.map((item) => item.nighttemp),
     }
-    // 更新 recentWeather 数据
-    recentWeather.value = weatherStore.currentWeather.map((item) => ({
-      dayOfWeek: item.week,
-      date: item.date,
-      weather: item.dayweather,
-      wind: `${item.daywind} ${item.daypower}`,
-    }))
     liveWeather.value = weatherStore.liveWeather
   } catch (error) {
     console.error('获取天气信息失败：', error)

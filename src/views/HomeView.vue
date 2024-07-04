@@ -1,4 +1,4 @@
-// src/views/HomeView.vue
+<!-- src/views/HomeView.vue -->
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <Header />
@@ -56,7 +56,7 @@
             >
               <button
                 class="bg-yellow-500 text-center w-[100px] py-4 px-5"
-                @click.stop="viewCity(city.name)"
+                @click.stop="handleCitySelect(city)"
               >
                 查看
               </button>
@@ -80,10 +80,10 @@
             :key="index"
             class="flex flex-col flex-1 text-center gap-4"
           >
-            <span>{{ getDayOfWeek(index) }}</span>
-            <span>{{ formatDate(day.date) }}</span>
+            <span>{{ weatherStore.getDayOfWeek(index) }}</span>
+            <span>{{ weatherStore.formatDate(day.date) }}</span>
             <span>{{ day.dayweather }}</span>
-            <span> 风力:{{ formatWind(day.daypower) }} </span>
+            <span> 风力:{{ weatherStore.formatWind(day.daypower) }} </span>
           </div>
         </div>
         <div class="weathercanvas h-80 mt-6">
@@ -127,31 +127,6 @@ const currentCityChartData = computed(() => {
   }
 })
 
-// 获取今天是周几
-const getDayOfWeek = (index) => {
-  const daysOfWeek = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
-  const today = new Date().getDay()
-  const calculatedIndex = (today + index) % 7
-  if (index === 0) {
-    return '今天'
-  } else if (index === 1) {
-    return '明天'
-  } else {
-    return daysOfWeek[calculatedIndex]
-  }
-}
-// 格式化日期
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const day = date.getDate().toString().padStart(2, '0')
-  return `${month}-${day}`
-}
-// 格式化风力
-const formatWind = (windPower) => {
-  const windPowerNumber = parseInt(windPower.replace('级', ''))
-  return `${windPowerNumber}-${windPowerNumber + 2}`
-}
 // 获取实时温度
 const getLiveTemp = (adcode) => {
   const city = cities.value.find((city) => city.adcode === adcode)
@@ -185,10 +160,6 @@ const handleCitySelect = async (city) => {
   router.push({ name: 'weather', params: { adcode: city.adcode } })
 }
 
-const viewCity = (cityName) => {
-  // 实现查看城市的逻辑
-  console.log('查看城市:', cityName)
-}
 const deleteCity = (adcode) => {
   weatherStore.deleteCity(adcode)
 }

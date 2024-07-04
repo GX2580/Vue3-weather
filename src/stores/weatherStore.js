@@ -110,5 +110,42 @@ export const useWeatherStore = defineStore('weather', {
     saveCitiesToLocalStorage() {
       localStorage.setItem('cities', JSON.stringify(this.cities))
     },
+    // 获取今天是周几
+    getDayOfWeek(index) {
+      const daysOfWeek = [
+        '周日',
+        '周一',
+        '周二',
+        '周三',
+        '周四',
+        '周五',
+        '周六',
+      ]
+      const today = new Date().getDay()
+      const calculatedIndex = (today + index) % 7
+      if (index === 0) {
+        return '今天'
+      } else if (index === 1) {
+        return '明天'
+      } else {
+        return daysOfWeek[calculatedIndex]
+      }
+    },
+    // 格式化日期
+    formatDate(dateString) {
+      const date = new Date(dateString)
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const day = date.getDate().toString().padStart(2, '0')
+      return `${month}-${day}`
+    },
+    // 格式化风力
+    formatWind(windPower) {
+      if (!windPower) {
+        // 处理 windPower 为 undefined 的情况
+        return 'N/A'
+      }
+      const windPowerNumber = parseInt(windPower.replace('级', ''))
+      return `${windPowerNumber}-${windPowerNumber + 2}级`
+    },
   },
 })
