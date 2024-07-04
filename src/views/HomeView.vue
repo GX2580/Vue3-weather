@@ -18,11 +18,13 @@
           class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[62px]"
         >
           <p v-if="networkError">对不起网络似乎出了点问题 请稍后再查询</p>
-          <p v-if="noResults">似乎没有找到你查找的城市</p>
+          <p v-if="!networkError && searchResults.length === 0">
+            似乎没有找到你查找的城市
+          </p>
           <li
             v-for="result in searchResults"
-            :key="result.id"
-            @click="selectCity(result)"
+            :key="result.adcode"
+            @click="handleCitySelect(result)"
             class="cursor-pointer hover:bg-weather-primary p-2"
           >
             {{ result.name }}
@@ -76,13 +78,16 @@
             class="flex flex-col flex-1 text-center gap-4"
           >
             <span>{{ getDayOfWeek(index) }}</span>
-            <span>{{ day.date }}</span>
+            <span>{{ formatDate(day.date) }}</span>
             <span>{{ day.dayweather }}</span>
-            <span> 风力:{{ day.daywind }} {{ day.daypower }} </span>
+            <span> 风力:{{ formatWind(day.daypower) }} </span>
           </div>
         </div>
         <div class="weathercanvas h-80 mt-6">
-          <CommonEcharts :chartId="'weatherChart'" :chartData="chartData" />
+          <CommonEcharts
+            :chartId="'weatherChart'"
+            :chartData="currentCityChartData"
+          />
         </div>
       </div>
     </main>
@@ -90,26 +95,43 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
-import { getLocationInfo, getWeather } from '@/api/weatherApi'
+import { useWeatherStore } from '@/stores/weatherStore'
+
+const weatherStore = useWeatherStore()
 
 const searchQuery = ref('')
 const showSearchResults = ref(false)
 const searchResults = ref([])
 const networkError = ref(false)
-const noResults = ref(false)
 
-const cities = ref([]) // 使用 ref([]) 初始化 cities
+// 获取天气数据
+const cities = computed(() => weatherStore.cities)
+const currentWeather = computed(() => weatherStore.currentWeather)
 
-const currentWeather = ref([]) // 使用 ref([]) 初始化 currentWeather
-
-const chartData = ref({
-  dates: [],
-  dayTemps: [],
-  nightTemps: [],
+// 使用 computed 计算当前城市的 chartData
+const currentCityChartData = computed(() => {
+  // 查找当前城市的天气预报数据
+  const currentCity = cities.value.find((city) => city.isDefault)
+  if (currentCity) {
+    const forecasts = weatherStore.currentWeather
+    return {
+      dates: forecasts.map((item) => item.date),
+      dayTemps: forecasts.map((item) => item.daytemp),
+      nightTemps: forecasts.map((item) => item.nighttemp),
+    }
+  } else {
+    // 如果没有找到当前城市，返回空数据
+    return {
+      dates: [],
+      dayTemps: [],
+      nightTemps: [],
+    }
+  }
 })
+
 // 获取今天是周几
 const getDayOfWeek = (index) => {
   const daysOfWeek = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
@@ -123,81 +145,58 @@ const getDayOfWeek = (index) => {
     return daysOfWeek[calculatedIndex]
   }
 }
+// 格式化日期
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  return `${month}-${day}`
+}
+// 格式化风力
+const formatWind = (windPower) => {
+  const windPowerNumber = parseInt(windPower.replace('级', ''))
+  return `${windPowerNumber}-${windPowerNumber + 2}`
+}
 
-// 处理搜索逻辑
-const handleSearch = () => {
-  // 这里应该实现实际的搜索逻辑
-  // 模拟搜索过程
+const handleSearch = async () => {
+  if (searchQuery.value === '') {
+    showSearchResults.value = false
+    return
+  }
   showSearchResults.value = true
   networkError.value = false
-  noResults.value = false
-
-  if (searchQuery.value.length > 0) {
-    // 模拟API调用
-    setTimeout(() => {
-      if (Math.random() > 0.9) {
-        networkError.value = true
-        searchResults.value = []
-      } else if (Math.random() > 0.5) {
-        noResults.value = true
-        searchResults.value = []
-      } else {
-        searchResults.value = [{ id: 1, name: searchQuery.value + '市' }]
-      }
-    }, 300)
-  } else {
-    showSearchResults.value = false
+  try {
+    const results = await weatherStore.searchCity(searchQuery.value)
+    searchResults.value = results
+  } catch (error) {
+    networkError.value = true
+    console.error('搜索城市时出错:', error)
   }
 }
 
-// 处理城市选择逻辑
-const selectCity = (city) => {
-  // 处理城市选择逻辑
-  showSearchResults.value = false
+const handleCitySelect = async (city) => {
   searchQuery.value = ''
-  // 这里应该触发获取所选城市天气数据的逻辑
+  showSearchResults.value = false
+  try {
+    await weatherStore.addCity({
+      name: city.name,
+      adcode: city.adcode,
+    })
+  } catch (error) {
+    console.error('添加城市失败：', error)
+  }
 }
 
-// 查看城市天气
 const viewCity = (cityName) => {
   // 实现查看城市的逻辑
   console.log('查看城市:', cityName)
 }
-// 删除城市
 const deleteCity = (adcode) => {
-  // 实现删除城市的逻辑
-  // 根据 adcode 从 cities 中删除对应的城市
-  cities.value = cities.value.filter((city) => city.adcode !== adcode)
+  weatherStore.deleteCity(adcode)
 }
-// 初始化页面，加载默认城市天气信息
+
 onMounted(async () => {
-  try {
-    const res = await getLocationInfo() // 获取位置信息
-    const adcode = res.data.adcode
-    const weatherRes = await getWeather(adcode) // 获取天气信息
-    const forecasts = weatherRes.data.forecasts[0].casts // 获取预报信息
-
-    // 更新 cities 数据
-    cities.value = [
-      {
-        name: weatherRes.data.forecasts[0].city,
-        temp: forecasts[0].daytemp, // 使用当天白天温度
-        adcode: weatherRes.data.forecasts[0].adcode, // 添加 adcode 属性
-      },
-    ]
-
-    // 更新 currentWeather 数据
-    currentWeather.value = forecasts
-
-    // 更新 chartData 数据
-    chartData.value = {
-      dates: forecasts.map((item) => item.date),
-      dayTemps: forecasts.map((item) => item.daytemp),
-      nightTemps: forecasts.map((item) => item.nighttemp),
-    }
-  } catch (error) {
-    console.error('获取天气信息失败：', error)
-  }
+  await weatherStore.initialize()
 })
 </script>
 

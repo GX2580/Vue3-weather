@@ -28,10 +28,12 @@ export const getWeather = (adcode) => {
 
 // 搜索城市
 export const searchCity = (keywords) => {
-  return weatherApi.get('/place/text', {
+  return weatherApi.get('/config/district', {
+    // 修改接口路径
     params: {
       keywords: keywords, // 搜索关键词
-      types: '190100', // 城市代码类型
+      subdistrict: 1, // 获取下一级行政区
+      extensions: 'base',
     },
   })
 }

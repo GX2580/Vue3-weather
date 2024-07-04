@@ -48,6 +48,6 @@ function toggleInfo() {
 }
 
 onMounted(() => {
-  weatherStore.fetchWeatherData()
+  weatherStore.initialize() // 修改为调用 initialize 方法
 })
 </script>
