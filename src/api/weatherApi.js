@@ -6,6 +6,7 @@ const API_KEY = import.meta.env.VITE_AMAP_API_KEY
 // 设置基础URL
 const BASE_URL = 'https://restapi.amap.com/v3'
 
+// 创建axios实例
 const weatherApi = axios.create({
   baseURL: BASE_URL,
   params: {
@@ -45,7 +46,6 @@ export const getLiveWeather = (adcode) => {
 // 搜索城市
 export const searchCity = (keywords) => {
   return weatherApi.get('/config/district', {
-    // 修改接口路径
     params: {
       // 搜索关键词
       keywords: keywords,

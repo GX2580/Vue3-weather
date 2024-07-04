@@ -1,4 +1,3 @@
-// src/components/WeatherHeader.vue
 <template>
   <header class="bg-weather-primary shadow-lg sticky top-0 z-10">
     <nav
@@ -79,11 +78,11 @@ function toggleInfo() {
 }
 
 // 添加城市到 store
-function addCity() {
+async function addCity() {
   // 在此处获取当前路由参数中的 adcode
   const adcode = route.params.adcode
-
-  weatherStore.addCity({
+  //  调用 weatherStore 的 addCity 方法
+  await weatherStore.addCity({
     name: weatherStore.city,
     adcode: adcode, // 使用路由参数中的 adcode
     temp: weatherStore.liveWeather.temperature,

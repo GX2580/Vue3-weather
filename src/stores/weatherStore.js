@@ -1,4 +1,3 @@
-// src/stores/weatherStore.js
 import { defineStore } from 'pinia'
 import {
   getLocationInfo,
@@ -70,11 +69,11 @@ export const useWeatherStore = defineStore('weather', {
         return
       }
       this.cities.push(city)
+      // 保存城市列表到 localStorage
+      this.saveCitiesToLocalStorage()
       // 获取并设置天气数据
       await this.setWeatherData(city.adcode)
       await this.setLiveWeatherData(city.adcode)
-      // 在添加城市后更新 localStorage
-      this.saveCitiesToLocalStorage()
     },
     // 删除城市
     deleteCity(adcode) {
