@@ -1,3 +1,4 @@
+// src/views/SearchView.vue
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <Header />
@@ -6,31 +7,18 @@
       <!-- Search input -->
       <div class="w-full pt-4 mb-6 relative">
         <div class="p-2 text-center bg-weather-secondary">
-          您正在预览青岛市的天气信息
-          <span style="display: none">,可以通过右上角的"+"号按钮保存起来</span>
+          您正在预览{{ cityName }}的天气信息
+          <span v-if="!cityExistsInStore()" style="display: inline"
+            >,可以通过右上角的"+"号按钮保存起来</span
+          >
         </div>
         <div class="container flex flex-col text-center mt-6 gap-4">
-          <h1>当日气温是:25摄氏度</h1>
-          <h1>当日天气是:多云</h1>
-          <h1>当日风向是:南风</h1>
-          <h1>当日风力是:≤3级</h1>
+          <h1>当日气温是:{{ liveWeather.temperature }}摄氏度</h1>
+          <h1>当日天气是:{{ liveWeather.weather }}</h1>
+          <h1>当日风向是:{{ liveWeather.winddirection }}</h1>
+          <h1>当日风力是:{{ liveWeather.windpower }}</h1>
         </div>
         <hr class="border-white border-opacity-10 mt-6" />
-        <!--  <ul
-          v-show="false"
-          class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[62px]"
-        >
-          <p v-if="true">对不起网络似乎出了点问题 请稍后再查询</p>
-          <p v-if="false">似乎没有找到你查找的城市</p>
-          <li
-            v-for="result in searchResults"
-            :key="result.id"
-            @click="selectCity(result)"
-            class="cursor-pointer hover:bg-weather-primary p-2"
-          >
-            {{ result.name }}
-          </li>
-        </ul> -->
       </div>
 
       <!-- Recent weather -->
@@ -57,27 +45,54 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
+import { useWeatherStore } from '@/stores/weatherStore'
+
+const route = useRoute()
+const weatherStore = useWeatherStore()
+const cityName = ref('')
 
 const chartData = ref({
-  dates: ['07-02', '07-03', '07-04', '07-05'],
-  dayTemps: [29, 31, 36, 35],
-  nightTemps: [21, 25, 26, 27],
+  dates: [],
+  dayTemps: [],
+  nightTemps: [],
 })
 
-const recentWeather = ref([
-  { dayOfWeek: '今天', date: '07-02', weather: '多云', wind: '南风≤3级' },
-  { dayOfWeek: '明天', date: '07-03', weather: '晴', wind: '东南风3-4级' },
-  { dayOfWeek: '周四', date: '07-04', weather: '阴', wind: '东风4-5级' },
-  { dayOfWeek: '周五', date: '07-05', weather: '小雨', wind: '东北风3-4级' },
-])
+const recentWeather = ref([])
+const liveWeather = ref({})
 
-const searchResults = ref([])
-
-function selectCity(city) {
-  // 处理城市选择逻辑
-  // 这里应该触发获取所选城市天气数据的逻辑
+// 获取天气数据
+const cities = computed(() => weatherStore.cities) // 城市列表
+const cityExistsInStore = () => {
+  return weatherStore.cities.some((city) => city.adcode === route.params.adcode)
 }
+onMounted(async () => {
+  // 获取路由参数中的 adcode
+  const adcode = route.params.adcode
+  // 根据 adcode 获取天气信息
+  try {
+    await weatherStore.setWeatherData(adcode)
+    await weatherStore.setLiveWeatherData(adcode)
+    cityName.value = weatherStore.currentWeather[0].city
+    // 更新 chartData 数据
+    chartData.value = {
+      dates: weatherStore.currentWeather.map((item) => item.date),
+      dayTemps: weatherStore.currentWeather.map((item) => item.daytemp),
+      nightTemps: weatherStore.currentWeather.map((item) => item.nighttemp),
+    }
+    // 更新 recentWeather 数据
+    recentWeather.value = weatherStore.currentWeather.map((item) => ({
+      dayOfWeek: item.week,
+      date: item.date,
+      weather: item.dayweather,
+      wind: `${item.daywind} ${item.daypower}`,
+    }))
+    liveWeather.value = weatherStore.liveWeather
+  } catch (error) {
+    console.error('获取天气信息失败：', error)
+  }
+})
 </script>

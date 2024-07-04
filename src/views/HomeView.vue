@@ -1,4 +1,4 @@
-// 组件部分
+// src/views/HomeView.vue
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <Header />
@@ -21,11 +21,12 @@
           <p v-if="networkError">对不起网络似乎出了点问题 请稍后再查询</p>
           <p v-if="!networkError && !searchResult">似乎没有找到你查找的城市</p>
           <div
-            v-if="searchResult"
-            @click="handleCitySelect(searchResult)"
+            v-for="result in searchResult"
+            :key="result.id"
+            @click="handleCitySelect(result)"
             class="cursor-pointer hover:bg-weather-primary p-2"
           >
-            {{ searchResult.name }}
+            {{ result.name }}
           </div>
         </div>
       </div>
@@ -101,8 +102,10 @@ import { ref, onMounted, computed } from 'vue'
 import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
 import { useWeatherStore } from '@/stores/weatherStore'
+import { useRouter } from 'vue-router' // 引入 useRouter
 
 const weatherStore = useWeatherStore()
+const router = useRouter() // 创建 router 实例
 
 const searchQuery = ref('') // 搜索关键词
 const showSearchResults = ref(false) // 是否显示搜索结果
@@ -167,25 +170,19 @@ const handleSearch = async () => {
   networkError.value = false
   try {
     const result = await weatherStore.searchCity(searchQuery.value)
-    searchResult.value = result[0]
+    searchResult.value = result
   } catch (error) {
     networkError.value = true
     console.error('搜索城市时出错:', error)
   }
 }
 
+// 处理城市选择逻辑
 const handleCitySelect = async (city) => {
   searchQuery.value = ''
   showSearchResults.value = false
-  try {
-    await weatherStore.addCity({
-      name: city.name,
-      adcode: city.adcode,
-      temp: weatherStore.liveWeather.temperature, // 将实时温度存储在 city 对象中
-    })
-  } catch (error) {
-    console.error('添加城市失败：', error)
-  }
+  // 跳转到 SearchView 并传递 adcode
+  router.push({ name: 'weather', params: { adcode: city.adcode } })
 }
 
 const viewCity = (cityName) => {

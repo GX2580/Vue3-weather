@@ -32,9 +32,11 @@
           class="fa-solid fa-circle-info text-xl hover:text-weather-secondary cursor-pointer duration-1000"
           @click="toggleInfo"
         ></i>
+        <!-- 根据当前路由判断是否显示添加按钮 -->
         <i
+          v-if="showAddButton"
           class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"
-          style="display: none"
+          @click="addCity"
         ></i>
       </div>
     </nav>
@@ -42,18 +44,45 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useInfoStore } from '@/stores/infoStore'
 import { useWeatherStore } from '@/stores/weatherStore'
+import { useRoute } from 'vue-router'
 
 const infoStore = useInfoStore()
 const weatherStore = useWeatherStore()
+const route = useRoute()
+
+// 计算属性，判断是否显示添加按钮
+const showAddButton = computed(() => {
+  // 如果不在首页或者城市已经存在，则不显示添加按钮
+  if (route.name !== 'home' || cityExistsInStore()) {
+    return false
+  }
+  return true
+})
+
+// 判断城市是否已经存在于 store 中
+function cityExistsInStore() {
+  return weatherStore.cities.some(
+    (city) => city.adcode === weatherStore.liveWeather.adcode
+  )
+}
 
 function toggleInfo() {
   infoStore.toggleInfo()
 }
 
+// 添加城市到 store
+function addCity() {
+  weatherStore.addCity({
+    name: weatherStore.city,
+    adcode: weatherStore.liveWeather.adcode,
+    temp: weatherStore.liveWeather.temperature,
+  })
+}
+
 onMounted(() => {
-  weatherStore.initialize() // 修改为调用 initialize 方法
+  weatherStore.initialize()
 })
 </script>
