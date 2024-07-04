@@ -1,4 +1,4 @@
-<!-- src/components/WeatherHeader.vue -->
+// src/components/WeatherHeader.vue
 <template>
   <header class="bg-weather-primary shadow-lg sticky top-0 z-10">
     <nav
@@ -58,11 +58,13 @@ const route = useRoute()
 
 // 计算属性，判断是否显示添加按钮
 const showAddButton = computed(() => {
-  // 如果城市已经存在，则不显示添加按钮
-  if (cityExistsInStore()) {
-    return false
+  // 只在 /weather/:adcode 路由下并且城市不存在时显示
+  // 获取路由名称
+  const routeName = route.name
+  if (routeName === 'weather' && !cityExistsInStore()) {
+    return true
   }
-  return true
+  return false
 })
 
 // 判断城市是否已经存在于 store 中
@@ -78,9 +80,12 @@ function toggleInfo() {
 
 // 添加城市到 store
 function addCity() {
+  // 在此处获取当前路由参数中的 adcode
+  const adcode = route.params.adcode
+
   weatherStore.addCity({
     name: weatherStore.city,
-    adcode: weatherStore.liveWeather.adcode,
+    adcode: adcode, // 使用路由参数中的 adcode
     temp: weatherStore.liveWeather.temperature,
   })
 }

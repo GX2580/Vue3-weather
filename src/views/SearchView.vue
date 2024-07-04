@@ -75,9 +75,11 @@ watch(
   async (newAdcode) => {
     if (newAdcode) {
       try {
-        await weatherStore.setWeatherData(newAdcode)
         await weatherStore.setLiveWeatherData(newAdcode)
-        cityName.value = weatherStore.currentWeather[0].city
+        // 在获取实时天气数据后，再设置城市名称
+        cityName.value = weatherStore.liveWeather.city
+
+        await weatherStore.setWeatherData(newAdcode)
         chartData.value = {
           dates: weatherStore.currentWeather.map((item) => item.date),
           dayTemps: weatherStore.currentWeather.map((item) => item.daytemp),
@@ -91,23 +93,4 @@ watch(
   },
   { immediate: true }
 )
-onMounted(async () => {
-  // 获取路由参数中的 adcode
-  const adcode = route.params.adcode
-  // 根据 adcode 获取天气信息
-  try {
-    await weatherStore.setWeatherData(adcode)
-    await weatherStore.setLiveWeatherData(adcode)
-    cityName.value = weatherStore.liveWeather.city
-    // 更新 chartData 数据
-    chartData.value = {
-      dates: weatherStore.currentWeather.map((item) => item.date),
-      dayTemps: weatherStore.currentWeather.map((item) => item.daytemp),
-      nightTemps: weatherStore.currentWeather.map((item) => item.nighttemp),
-    }
-    liveWeather.value = weatherStore.liveWeather
-  } catch (error) {
-    console.error('获取天气信息失败：', error)
-  }
-})
 </script>
