@@ -81,7 +81,3 @@ function selectCity(city) {
   // 这里应该触发获取所选城市天气数据的逻辑
 }
 </script>
-
-<style scoped>
-/* 如果需要任何特定的样式，可以在这里添加 */
-</style>

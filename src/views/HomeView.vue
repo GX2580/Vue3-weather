@@ -210,8 +210,3 @@ onMounted(async () => {
   await weatherStore.initialize()
 })
 </script>
-
-<style scoped>
-/* 如果需要任何特定的样式，可以在这里添加 */
-</style>
-修改了handlesearch的部分将获取到的数据改为当前行政区数据
