@@ -16,7 +16,7 @@
           <h1>当日风力是:≤3级</h1>
         </div>
         <hr class="border-white border-opacity-10 mt-6" />
-        <ul
+        <!--  <ul
           v-show="false"
           class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[62px]"
         >
@@ -30,7 +30,7 @@
           >
             {{ result.name }}
           </li>
-        </ul>
+        </ul> -->
       </div>
 
       <!-- Recent weather -->
