@@ -118,7 +118,7 @@ const chartData = ref({
   nightTemps: [21, 25, 26, 27],
 })
 
-function handleSearch() {
+/* function handleSearch() {
   // 这里应该实现实际的搜索逻辑
   // 模拟搜索过程
   showSearchResults.value = true
@@ -141,7 +141,7 @@ function handleSearch() {
   } else {
     showSearchResults.value = false
   }
-}
+} */
 
 function selectCity(city) {
   // 处理城市选择逻辑
