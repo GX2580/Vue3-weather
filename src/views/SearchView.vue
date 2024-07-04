@@ -1,12 +1,6 @@
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
-    <Header
-      :city="currentCity"
-      :weather="currentWeather"
-      :temperature="currentTemp"
-      :wind="currentWind"
-      @showInfo="showInfoModal"
-    />
+    <Header />
 
     <main class="w-3/4 mx-auto text-white flex flex-col items-center">
       <!-- Search input -->
@@ -67,11 +61,6 @@ import { ref } from 'vue'
 import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
 
-const currentCity = ref('青岛市')
-const currentWeather = ref('多云')
-const currentTemp = ref(25)
-const currentWind = ref('南风≤3级')
-
 const chartData = ref({
   dates: ['07-02', '07-03', '07-04', '07-05'],
   dayTemps: [29, 31, 36, 35],
@@ -85,44 +74,10 @@ const recentWeather = ref([
   { dayOfWeek: '周五', date: '07-05', weather: '小雨', wind: '东北风3-4级' },
 ])
 
-function showInfoModal() {
-  // 实现显示信息模态框的逻辑
-}
-
-function handleSearch() {
-  // 这里应该实现实际的搜索逻辑
-  // 模拟搜索过程
-  showSearchResults.value = true
-  networkError.value = false
-  noResults.value = false
-
-  if (searchQuery.value.length > 0) {
-    // 模拟API调用
-    setTimeout(() => {
-      if (Math.random() > 0.9) {
-        networkError.value = true
-        searchResults.value = []
-      } else if (Math.random() > 0.5) {
-        noResults.value = true
-        searchResults.value = []
-      } else {
-        searchResults.value = [
-          { id: 1, name: searchQuery.value + '市' },
-          { id: 2, name: searchQuery.value + '县' },
-          { id: 3, name: '新' + searchQuery.value + '区' },
-        ]
-      }
-    }, 300)
-  } else {
-    showSearchResults.value = false
-  }
-}
+const searchResults = ref([])
 
 function selectCity(city) {
   // 处理城市选择逻辑
-  currentCity.value = city.name
-  showSearchResults.value = false
-  searchQuery.value = ''
   // 这里应该触发获取所选城市天气数据的逻辑
 }
 </script>

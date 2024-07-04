@@ -1,12 +1,6 @@
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
-    <Header
-      :city="currentCity"
-      :weather="currentWeather"
-      :temperature="currentTemp"
-      :wind="currentWind"
-      @showInfo="showInfoModal"
-    />
+    <Header />
 
     <main class="w-3/4 mx-auto text-white flex flex-col items-center">
       <!-- Search input -->
@@ -99,11 +93,6 @@ import { ref } from 'vue'
 import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
 
-const currentCity = ref('武汉市')
-const currentWeather = ref('阴')
-const currentTemp = ref(29)
-const currentWind = ref('西风≤3级')
-
 const searchQuery = ref('')
 const showSearchResults = ref(false)
 const searchResults = ref([])
@@ -128,10 +117,6 @@ const chartData = ref({
   dayTemps: [29, 31, 36, 35],
   nightTemps: [21, 25, 26, 27],
 })
-
-function showInfoModal() {
-  // 实现显示信息模态框的逻辑
-}
 
 function handleSearch() {
   // 这里应该实现实际的搜索逻辑
@@ -160,7 +145,6 @@ function handleSearch() {
 
 function selectCity(city) {
   // 处理城市选择逻辑
-  currentCity.value = city.name
   showSearchResults.value = false
   searchQuery.value = ''
   // 这里应该触发获取所选城市天气数据的逻辑

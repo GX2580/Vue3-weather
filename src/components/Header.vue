@@ -1,3 +1,4 @@
+<!-- src/components/WeatherHeader.vue -->
 <template>
   <header class="bg-weather-primary shadow-lg sticky top-0 z-10">
     <nav
@@ -10,11 +11,15 @@
             <p class="text-3xl">新中地天气</p>
           </div>
         </router-link>
-        <div class="flex gap-3 items-center">
-          <h4 class="text-2xl">{{ city }}</h4>
-          <span class="text-lg">实时天气:{{ weather }} {{ temperature }}℃</span>
-          <span class="text-lg">{{ wind }}</span>
+        <div v-if="!weatherStore.loading" class="flex gap-3 items-center">
+          <h4 class="text-2xl">{{ weatherStore.city }}</h4>
+          <span class="text-lg"
+            >实时天气: {{ weatherStore.weather }}
+            {{ weatherStore.temperature }}℃</span
+          >
+          <span class="text-lg">{{ weatherStore.wind }}</span>
         </div>
+        <div v-else>Loading weather data...</div>
       </div>
       <div class="flex items-center gap-4">
         <i
@@ -31,19 +36,18 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { onMounted } from 'vue'
 import { useInfoStore } from '@/stores/infoStore'
-
-/* const props = defineProps({
-  city: String,
-  weather: String,
-  temperature: Number,
-  wind: String,
-}) */
+import { useWeatherStore } from '@/stores/weatherStore'
 
 const infoStore = useInfoStore()
+const weatherStore = useWeatherStore()
 
 function toggleInfo() {
   infoStore.toggleInfo()
 }
+
+onMounted(() => {
+  weatherStore.fetchWeatherData()
+})
 </script>

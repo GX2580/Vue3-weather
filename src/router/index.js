@@ -9,7 +9,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/weather/:adecode',
+      path: '/weather/:adcode',
       name: 'weather',
       component: () => import('@/views/SearchView.vue'),
     },
