@@ -71,9 +71,6 @@ export const useWeatherStore = defineStore('weather', {
       this.cities.push(city)
       // 保存城市列表到 localStorage
       this.saveCitiesToLocalStorage()
-      // 获取并设置天气数据
-      await this.setWeatherData(city.adcode)
-      await this.setLiveWeatherData(city.adcode)
     },
     // 删除城市
     deleteCity(adcode) {
@@ -102,7 +99,7 @@ export const useWeatherStore = defineStore('weather', {
       try {
         const res = await searchCity(keywords)
         // 返回搜索结果
-        return res.data.districts
+        return res.data.districts[0]
       } catch (error) {
         console.error('搜索城市失败：', error)
         throw error

@@ -83,7 +83,7 @@ async function addCity() {
   const adcode = route.params.adcode
   //  调用 weatherStore 的 addCity 方法
   await weatherStore.addCity({
-    name: weatherStore.city,
+    name: weatherStore.liveWeather.city,
     adcode: adcode, // 使用路由参数中的 adcode
     temp: weatherStore.liveWeather.temperature,
   })

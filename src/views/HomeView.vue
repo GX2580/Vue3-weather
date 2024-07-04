@@ -22,12 +22,11 @@
           <p v-if="networkError">对不起网络似乎出了点问题 请稍后再查询</p>
           <p v-if="!networkError && !searchResult">似乎没有找到你查找的城市</p>
           <div
-            v-for="result in searchResult"
-            :key="result.id"
-            @click="handleCitySelect(result)"
+            v-if="!networkError && searchResult"
+            @click="handleCitySelect(searchResult)"
             class="cursor-pointer hover:bg-weather-primary p-2"
           >
-            {{ result.name }}
+            {{ searchResult.name }}
           </div>
         </div>
       </div>
@@ -49,8 +48,8 @@
             <div
               class="bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full transition-all duration-300 ease-in-out group-hover:w-[80%]"
             >
-              <h3>{{ city.name }}</h3>
-              <span>{{ getLiveTemp(city.adcode) }}度</span>
+              <h3 @click="handleCitySelect(city)">{{ city.name }}</h3>
+              <span>{{ getLiveTemp(city.adcode) }}℃</span>
             </div>
             <div
               class="absolute right-0 top-0 h-full flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out"
@@ -99,7 +98,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
 import { useWeatherStore } from '@/stores/weatherStore'
@@ -127,7 +126,22 @@ const currentCityChartData = computed(() => {
     nightTemps: forecasts.map((item) => item.nighttemp),
   }
 })
-
+// 监听 cities 变化更新天气信息
+watch(cities, async () => {
+  // 遍历 cities，为每个城市更新实时天气
+  for (const city of cities.value) {
+    try {
+      const res = await weatherStore.setLiveWeatherData(city.adcode)
+      // 使用获取到的实时天气更新 city.temp
+      const liveTemp = res.liveWeather.temperature
+      city.temp = liveTemp
+    } catch (error) {
+      console.error('更新城市天气信息时出错:', error)
+    }
+  }
+  // 更新 localStorage 中的 cities
+  weatherStore.saveCitiesToLocalStorage()
+})
 // 获取实时温度
 const getLiveTemp = (adcode) => {
   const city = cities.value.find((city) => city.adcode === adcode)
