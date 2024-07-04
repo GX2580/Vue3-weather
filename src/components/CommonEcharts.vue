@@ -5,12 +5,14 @@
 <script setup>
 import { onMounted, watch, defineProps } from 'vue'
 import * as echarts from 'echarts'
-
+// 传入参数定义
 const props = defineProps({
+  // 图表ID
   chartId: {
     type: String,
     required: true,
   },
+  // 图表数据
   chartData: {
     type: Object,
     required: true,
@@ -19,11 +21,13 @@ const props = defineProps({
 
 let chart
 
+// 组件挂载完毕
 onMounted(() => {
   chart = echarts.init(document.getElementById(props.chartId))
   setChartOption()
 })
 
+// 监听图表数据的变化
 watch(
   () => props.chartData,
   () => {
@@ -60,6 +64,7 @@ function setChartOption() {
         },
         label: {
           show: true,
+          // 格式化标签显示内容
           formatter: (params) => `白${params.value}℃`,
           color: '#ffffff',
           fontSize: 15,

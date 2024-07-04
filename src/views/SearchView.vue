@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
@@ -69,6 +69,28 @@ const cities = computed(() => weatherStore.cities) // 城市列表
 const cityExistsInStore = () => {
   return weatherStore.cities.some((city) => city.adcode === route.params.adcode)
 }
+// 监听路由变化
+watch(
+  () => route.params.adcode,
+  async (newAdcode) => {
+    if (newAdcode) {
+      try {
+        await weatherStore.setWeatherData(newAdcode)
+        await weatherStore.setLiveWeatherData(newAdcode)
+        cityName.value = weatherStore.currentWeather[0].city
+        chartData.value = {
+          dates: weatherStore.currentWeather.map((item) => item.date),
+          dayTemps: weatherStore.currentWeather.map((item) => item.daytemp),
+          nightTemps: weatherStore.currentWeather.map((item) => item.nighttemp),
+        }
+        liveWeather.value = weatherStore.liveWeather
+      } catch (error) {
+        console.error('获取天气信息失败：', error)
+      }
+    }
+  },
+  { immediate: true }
+)
 onMounted(async () => {
   // 获取路由参数中的 adcode
   const adcode = route.params.adcode
@@ -76,7 +98,7 @@ onMounted(async () => {
   try {
     await weatherStore.setWeatherData(adcode)
     await weatherStore.setLiveWeatherData(adcode)
-    cityName.value = weatherStore.currentWeather[0].city
+    cityName.value = weatherStore.liveWeather.city
     // 更新 chartData 数据
     chartData.value = {
       dates: weatherStore.currentWeather.map((item) => item.date),

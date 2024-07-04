@@ -1,6 +1,7 @@
 <!-- src/views/HomeView.vue -->
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
+    <!-- 头部组件 -->
     <Header />
 
     <main class="w-3/4 mx-auto text-white flex flex-col items-center">

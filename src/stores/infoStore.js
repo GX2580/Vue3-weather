@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-
+// 信息状态管理
 export const useInfoStore = defineStore('info', {
   state: () => ({
-    showInfo: false
+    showInfo: false,
   }),
   actions: {
     toggleInfo() {
@@ -10,6 +10,6 @@ export const useInfoStore = defineStore('info', {
     },
     closeInfo() {
       this.showInfo = false
-    }
-  }
+    },
+  },
 })

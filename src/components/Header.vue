@@ -5,12 +5,14 @@
       class="w-3/4 mx-auto flex items-center justify-between gap-4 text-white py-8"
     >
       <div class="flex items-center gap-6">
+        <!-- 路由跳转 首页 -->
         <router-link to="/" aria-current="page">
           <div class="flex items-center gap-3">
             <i class="fa-solid fa-sun text-2xl"></i>
             <p class="text-3xl">新中地天气</p>
           </div>
         </router-link>
+        <!-- 展示实时天气 -->
         <div
           v-if="!weatherStore.loading"
           class="flex gap-3 items-center text-3xl"
@@ -28,6 +30,7 @@
         <div v-else>Loading weather data...</div>
       </div>
       <div class="flex items-center gap-4">
+        <!-- 信息图标 点击事件-->
         <i
           class="fa-solid fa-circle-info text-xl hover:text-weather-secondary cursor-pointer duration-1000"
           @click="toggleInfo"
@@ -55,8 +58,8 @@ const route = useRoute()
 
 // 计算属性，判断是否显示添加按钮
 const showAddButton = computed(() => {
-  // 如果不在首页或者城市已经存在，则不显示添加按钮
-  if (route.name !== 'home' || cityExistsInStore()) {
+  // 如果城市已经存在，则不显示添加按钮
+  if (cityExistsInStore()) {
     return false
   }
   return true

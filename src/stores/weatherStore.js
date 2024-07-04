@@ -8,12 +8,15 @@ import {
 } from '@/api/weatherApi'
 
 // 从 localStorage 中读取城市列表，如果没有则初始化为空数组
+// 读取localstorage
 const storedCities = localStorage.getItem('cities')
 const initialCities = storedCities ? JSON.parse(storedCities) : []
 
+// 天气状态管理
 export const useWeatherStore = defineStore('weather', {
   state: () => ({
-    cities: initialCities, // 使用 initialCities 初始化 cities
+    // 使用 initialCities 初始化 cities
+    cities: initialCities,
     currentWeather: [],
     liveWeather: {},
     chartData: {
