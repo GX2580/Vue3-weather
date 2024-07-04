@@ -50,7 +50,7 @@ export const useWeatherStore = defineStore('weather', {
       try {
         const res = await getLiveWeather(adcode)
         // 处理返回的实时天气数据
-        this.liveWeather = res.data.lives[0] 
+        this.liveWeather = res.data.lives[0]
       } catch (error) {
         console.error('获取实时天气信息失败：', error)
       }
@@ -94,7 +94,7 @@ export const useWeatherStore = defineStore('weather', {
       try {
         const res = await searchCity(keywords)
         // 返回搜索结果
-        return res.data.districts[0].districts
+        return res.data.districts
       } catch (error) {
         console.error('搜索城市失败：', error)
         throw error

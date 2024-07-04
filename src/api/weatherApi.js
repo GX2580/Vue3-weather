@@ -41,7 +41,7 @@ export const searchCity = (keywords) => {
     // 修改接口路径
     params: {
       keywords: keywords, // 搜索关键词
-      subdistrict: 1, // 获取下一级行政区
+      subdistrict: 0, // 获取当前行政区
       extensions: 'base',
     },
   })
