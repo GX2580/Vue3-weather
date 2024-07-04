@@ -30,7 +30,9 @@
           </li>
         </ul>
       </div>
-
+      <h2 v-if="true" class="text-center duration-200">
+        暂时没有保存过城市天气信息，请查询后点击右上角"+"号保存。
+      </h2>
       <!-- City list -->
       <div
         class="w-full mt-4 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300"

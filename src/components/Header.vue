@@ -5,7 +5,7 @@
       class="w-3/4 mx-auto flex items-center justify-between gap-4 text-white py-8"
     >
       <div class="flex items-center gap-6">
-        <router-link to="/weather" aria-current="page">
+        <router-link to="/" aria-current="page">
           <div class="flex items-center gap-3">
             <i class="fa-solid fa-sun text-2xl"></i>
             <p class="text-3xl">新中地天气</p>
