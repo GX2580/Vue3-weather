@@ -4,14 +4,18 @@ import {
   getLocationInfo,
   getWeather,
   searchCity,
-  getLiveWeather, // 引入 getLiveWeather
+  getLiveWeather,
 } from '@/api/weatherApi'
+
+// 从 localStorage 中读取城市列表，如果没有则初始化为空数组
+const storedCities = localStorage.getItem('cities')
+const initialCities = storedCities ? JSON.parse(storedCities) : []
 
 export const useWeatherStore = defineStore('weather', {
   state: () => ({
-    cities: [],
+    cities: initialCities, // 使用 initialCities 初始化 cities
     currentWeather: [],
-    liveWeather: {}, // 新增 liveWeather 用于存储实时天气数据
+    liveWeather: {},
     chartData: {
       dates: [],
       dayTemps: [],
@@ -66,11 +70,15 @@ export const useWeatherStore = defineStore('weather', {
       // 获取并设置天气数据
       await this.setWeatherData(city.adcode)
       await this.setLiveWeatherData(city.adcode)
+      // 在添加城市后更新 localStorage
+      this.saveCitiesToLocalStorage()
     },
     // 删除城市
     deleteCity(adcode) {
       // 根据 adcode 从 cities 中删除对应的城市
       this.cities = this.cities.filter((city) => city.adcode !== adcode)
+      // 在删除城市后更新 localStorage
+      this.saveCitiesToLocalStorage()
     },
     // 初始化，获取默认城市天气信息
     async initialize() {
@@ -78,12 +86,10 @@ export const useWeatherStore = defineStore('weather', {
         const res = await getLocationInfo() // 获取位置信息
         const adcode = res.data.adcode
         this.city = res.data.city // 保存城市名称
-        const city = {
-          name: res.data.city,
-          adcode: adcode,
-          isDefault: true, // 标记为默认城市
-        }
-        await this.addCity(city)
+
+        // 获取并设置当前位置的天气数据
+        await this.setWeatherData(adcode)
+        await this.setLiveWeatherData(adcode)
       } catch (error) {
         console.error('获取天气信息失败：', error)
       }
@@ -99,6 +105,10 @@ export const useWeatherStore = defineStore('weather', {
         console.error('搜索城市失败：', error)
         throw error
       }
+    },
+    // 将城市列表保存到 localStorage
+    saveCitiesToLocalStorage() {
+      localStorage.setItem('cities', JSON.stringify(this.cities))
     },
   },
 })

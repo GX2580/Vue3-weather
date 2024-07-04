@@ -1,4 +1,4 @@
-// src/stores/weatherStore.js // ... (store 代码保持不变) // 组件部分
+// 组件部分
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <Header />
@@ -111,26 +111,16 @@ const networkError = ref(false) // 是否出现网络错误
 
 // 获取天气数据
 const cities = computed(() => weatherStore.cities) // 城市列表
-const currentWeather = computed(() => weatherStore.currentWeather) // 当前城市天气预报
+const currentWeather = computed(() => weatherStore.currentWeather) // 当前位置天气预报
 
-// 使用 computed 计算当前城市的 chartData
+// 使用 computed 计算当前位置的 chartData
 const currentCityChartData = computed(() => {
-  // 查找当前城市的天气预报数据
-  const currentCity = cities.value.find((city) => city.isDefault)
-  if (currentCity) {
-    const forecasts = weatherStore.currentWeather
-    return {
-      dates: forecasts.map((item) => item.date),
-      dayTemps: forecasts.map((item) => item.daytemp),
-      nightTemps: forecasts.map((item) => item.nighttemp),
-    }
-  } else {
-    // 如果没有找到当前城市，返回空数据
-    return {
-      dates: [],
-      dayTemps: [],
-      nightTemps: [],
-    }
+  // 直接使用 store 中存储的当前位置天气预报数据
+  const forecasts = weatherStore.currentWeather
+  return {
+    dates: forecasts.map((item) => item.date),
+    dayTemps: forecasts.map((item) => item.daytemp),
+    nightTemps: forecasts.map((item) => item.nighttemp),
   }
 })
 
@@ -210,7 +200,3 @@ onMounted(async () => {
   await weatherStore.initialize()
 })
 </script>
-
-<style scoped>
-/* ... (样式代码保持不变) */
-</style>
