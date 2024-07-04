@@ -21,7 +21,7 @@ export const getWeather = (adcode) => {
   return weatherApi.get('/weather/weatherInfo', {
     params: {
       city: adcode, // 城市代码
-      extensions: 'all', // 请求所有天气信息
+      extensions: 'base', // 请求所有天气信息
     },
   })
 }
