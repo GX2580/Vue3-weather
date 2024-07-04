@@ -1,25 +1,25 @@
 // src/api/weatherApi.js
 import axios from 'axios'
 
-const API_KEY = import.meta.env.VITE_AMAP_API_KEY
-const BASE_URL = 'https://restapi.amap.com/v3'
+const API_KEY = import.meta.env.VITE_AMAP_API_KEY // 获取API密钥
+const BASE_URL = 'https://restapi.amap.com/v3' // 设置基础URL
 
 const weatherApi = axios.create({
   baseURL: BASE_URL,
   params: {
-    key: API_KEY,
+    key: API_KEY, // 设置默认参数，包含API密钥
   },
 })
 
 export const getLocationInfo = () => {
-  return weatherApi.get('/ip')
+  return weatherApi.get('/ip') // 获取位置信息
 }
 
 export const getWeather = (adcode) => {
   return weatherApi.get('/weather/weatherInfo', {
     params: {
-      city: adcode,
-      extensions: 'base',
+      city: adcode, // 城市代码
+      extensions: 'base', // 请求基本天气信息
     },
   })
 }
@@ -27,8 +27,8 @@ export const getWeather = (adcode) => {
 export const searchCity = (keywords) => {
   return weatherApi.get('/place/text', {
     params: {
-      keywords: keywords,
-      types: '190100', // 城市代码
+      keywords: keywords, // 搜索关键词
+      types: '190100', // 城市代码类型
     },
   })
 }
