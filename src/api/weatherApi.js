@@ -16,12 +16,21 @@ export const getLocationInfo = () => {
   return weatherApi.get('/ip')
 }
 
-// 获取天气信息
+// 获取天气信息(预报)
 export const getWeather = (adcode) => {
   return weatherApi.get('/weather/weatherInfo', {
     params: {
       city: adcode, // 城市代码
-      extensions: 'base', // 请求所有天气信息
+      extensions: 'all', // 请求所有天气信息
+    },
+  })
+}
+// 获取实时天气
+export const getLiveWeather = (adcode) => {
+  return weatherApi.get('/weather/weatherInfo', {
+    params: {
+      city: adcode, // 城市代码
+      extensions: 'base', // 请求实时天气信息
     },
   })
 }

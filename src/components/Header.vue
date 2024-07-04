@@ -13,11 +13,14 @@
         </router-link>
         <div v-if="!weatherStore.loading" class="flex gap-3 items-center">
           <h4 class="text-2xl">{{ weatherStore.city }}</h4>
-          <span class="text-lg"
-            >实时天气: {{ weatherStore.weather }}
-            {{ weatherStore.temperature }}℃</span
-          >
-          <span class="text-lg">{{ weatherStore.wind }}</span>
+          <span class="text-lg">
+            实时天气: {{ weatherStore.liveWeather.weather }}
+            {{ weatherStore.liveWeather.temperature }}℃
+          </span>
+          <span class="text-lg">
+            {{ weatherStore.liveWeather.winddirection }}
+            {{ weatherStore.liveWeather.windpower }}
+          </span>
         </div>
         <div v-else>Loading weather data...</div>
       </div>

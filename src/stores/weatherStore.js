@@ -1,11 +1,17 @@
 // src/stores/weatherStore.js
 import { defineStore } from 'pinia'
-import { getLocationInfo, getWeather, searchCity } from '@/api/weatherApi'
+import {
+  getLocationInfo,
+  getWeather,
+  searchCity,
+  getLiveWeather, // 引入 getLiveWeather
+} from '@/api/weatherApi'
 
 export const useWeatherStore = defineStore('weather', {
   state: () => ({
     cities: [],
     currentWeather: [],
+    liveWeather: {}, // 新增 liveWeather 用于存储实时天气数据
     chartData: {
       dates: [],
       dayTemps: [],
@@ -13,16 +19,16 @@ export const useWeatherStore = defineStore('weather', {
     },
     loading: false,
     error: null,
+    city: '',
   }),
   actions: {
-    // 获取并设置天气数据
+    // 获取并设置天气数据(预报)
     async setWeatherData(adcode) {
       this.loading = true
       this.error = null
       try {
-        const weatherRes = await getWeather(adcode) // 获取天气信息
-        const forecasts = weatherRes.data.forecasts[0].casts // 获取预报信息
-
+        const weatherRes = await getWeather(adcode)
+        const forecasts = weatherRes.data.forecasts[0].casts
         // 更新 currentWeather 数据
         this.currentWeather = forecasts
 
@@ -39,6 +45,16 @@ export const useWeatherStore = defineStore('weather', {
         this.loading = false
       }
     },
+    // 获取并设置实时天气
+    async setLiveWeatherData(adcode) {
+      try {
+        const res = await getLiveWeather(adcode)
+        // 处理返回的实时天气数据
+        this.liveWeather = res.data.lives[0] 
+      } catch (error) {
+        console.error('获取实时天气信息失败：', error)
+      }
+    },
     // 添加城市
     async addCity(city) {
       const exists = this.cities.some((item) => item.adcode === city.adcode)
@@ -49,6 +65,7 @@ export const useWeatherStore = defineStore('weather', {
       this.cities.push(city)
       // 获取并设置天气数据
       await this.setWeatherData(city.adcode)
+      await this.setLiveWeatherData(city.adcode)
     },
     // 删除城市
     deleteCity(adcode) {
@@ -60,6 +77,7 @@ export const useWeatherStore = defineStore('weather', {
       try {
         const res = await getLocationInfo() // 获取位置信息
         const adcode = res.data.adcode
+        this.city = res.data.city // 保存城市名称
         const city = {
           name: res.data.city,
           adcode: adcode,

@@ -1,4 +1,3 @@
-// src/views/HomeView.vue
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <Header />
@@ -46,7 +45,7 @@
               class="bg-weather-secondary py-4 px-5 flex justify-between cursor-pointer w-full transition-all duration-300 ease-in-out group-hover:w-[80%]"
             >
               <h3>{{ city.name }}</h3>
-              <span>{{ city.temp }}度</span>
+              <span>{{ getLiveTemp(city.adcode) }}度</span>
             </div>
             <div
               class="absolute right-0 top-0 h-full flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out"
@@ -157,6 +156,14 @@ const formatWind = (windPower) => {
   const windPowerNumber = parseInt(windPower.replace('级', ''))
   return `${windPowerNumber}-${windPowerNumber + 2}`
 }
+// 获取实时温度
+const getLiveTemp = (adcode) => {
+  const city = cities.value.find((city) => city.adcode === adcode)
+  if (city) {
+    return city.temp // 返回城市的实时温度
+  }
+  return 'N/A' // 如果没有找到城市，返回 N/A
+}
 
 const handleSearch = async () => {
   if (searchQuery.value === '') {
@@ -181,6 +188,7 @@ const handleCitySelect = async (city) => {
     await weatherStore.addCity({
       name: city.name,
       adcode: city.adcode,
+      temp: weatherStore.liveWeather.temperature, // 将实时温度存储在 city 对象中
     })
   } catch (error) {
     console.error('添加城市失败：', error)
