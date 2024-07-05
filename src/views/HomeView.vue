@@ -1,4 +1,5 @@
 // src/views/HomeView.vue
+
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <!-- 头部组件 -->
@@ -14,6 +15,7 @@
           class="py-3 px-3 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none placeholder-text-3xl focus:shadow-md"
           @input="debouncedHandleSearch"
         />
+
         <!-- 搜索结果列表 -->
         <div
           v-show="showSearchResults"
@@ -32,9 +34,7 @@
             @click="handleCitySelect(searchResult)"
             class="cursor-pointer hover:bg-weather-primary p-2"
           >
-            {{
-              `${searchResult.province}${searchResult.city}${searchResult.district}`
-            }}
+            {{ getFormattedSearchResult(searchResult) }}
           </div>
         </div>
       </div>
@@ -174,6 +174,7 @@ const handleSearch = async () => {
     showSearchResults.value = false
     return
   }
+
   showSearchResults.value = true
   networkError.value = false
   try {
@@ -195,6 +196,25 @@ const handleCitySelect = async (city) => {
 
 const deleteCity = (adcode) => {
   weatherStore.deleteCity(adcode)
+}
+
+// 格式化搜索结果
+const getFormattedSearchResult = (result) => {
+  // 根据level字段判断显示的级别
+  switch (result.level) {
+    case '乡镇':
+      return result.township || ''
+    case '区县':
+      return result.district || ''
+    case '市':
+      return result.city || '' // 直接返回城市名，不去除"市"
+    case '省':
+      return result.province || ''
+    default:
+      return `${result.province || ''}${result.city || ''}${
+        result.district || ''
+      }`
+  }
 }
 
 onMounted(async () => {
