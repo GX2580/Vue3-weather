@@ -21,7 +21,7 @@ This repository contains a simple weather application built with Vue.js that all
 
 - **App.vue**: The main Vue component that serves as the entry point of the application.
 - **weatherStore.js**: Vuex store for managing application state, including weather data and city management.
-- **README.md**: Documentation providing an overview of the project, setup instructions, and usage guidelines.
+- **Pseudocode.md**: Documentation providing an overview of the project, setup instructions, and usage guidelines.
 
 ## Setup and Installation
 
@@ -55,3 +55,7 @@ This repository contains a simple weather application built with Vue.js that all
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any bugs or feature requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
