@@ -44,9 +44,6 @@
         v-show="!showSearchResults"
         class="w-full mt-4 max-h-[300px] overflow-y-scroll scrollbar-thin hover:scrollbar-thumb-blue-300"
       >
-        <h2 v-if="cities.length === 0" class="text-center duration-200">
-          暂时没有保存过城市天气信息，请查询后点击右上角"+"号保存。
-        </h2>
         <div class="flex flex-col gap-2">
           <div
             v-for="city in cities"
