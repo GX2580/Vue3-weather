@@ -1,81 +1,57 @@
-# API 接口封装 (weatherApi.js)
+# Weather App
 
-- 函数 获取位置信息():
+This repository contains a simple weather application built with Vue.js that allows users to check the weather forecast and live weather conditions for multiple cities. The app utilizes the AMap (高德地图) API for fetching weather data and location information.
 
-  - 调用高德地图 API 获取用户当前位置的经纬度和 adcode
-  - 返回位置信息
+## Features
 
-- 函数 获取天气预报(adcode):
+- **Weather Forecasts**: View detailed weather forecasts for the next few days.
+- **Live Weather Updates**: Get real-time weather updates including temperature, humidity, and wind conditions.
+- **City Management**: Add and remove cities to track weather conditions.
+- **Search Functionality**: Search for cities to add to your weather tracking list.
+- **Data Visualization**: Visualize weather data using charts for better understanding.
 
-  - 调用高德地图 API 获取指定 adcode 的未来几天的天气预报信息
-  - 返回天气预报数据
+## Technologies Used
 
-- 函数 获取实时天气(adcode):
+- **Vue.js**: Frontend framework for building user interfaces.
+- **Axios**: Promise-based HTTP client for making API requests.
+- **AMap API**: For fetching location and weather data.
+- **LocalStorage**: For storing user's city preferences.
 
-  - 调用高德地图 API 获取指定 adcode 的实时天气信息
-  - 返回实时天气数据
+## Project Structure
 
-- 函数 搜索城市(关键词):
+- **App.vue**: The main Vue component that serves as the entry point of the application.
+- **weatherStore.js**: Vuex store for managing application state, including weather data and city management.
+- **README.md**: Documentation providing an overview of the project, setup instructions, and usage guidelines.
 
-  - 调用高德地图 API 根据关键词搜索城市
-  - 返回匹配的城市列表
+## Setup and Installation
 
-- 函数 根据 adcode 搜索城市(adcode):
-  - 调用高德地图 API 根据 adcode 搜索城市信息
-  - 返回城市信息
+1. Clone the repository:
 
-# 数据存储与管理 (weatherStore.js)
+   ```bash
+   git clone https://github.com/yourusername/weather-app.git
+   ```
 
-- 状态 cities: 从 localStorage 读取已保存的城市列表，初始为空数组
-- 状态 currentWeather: 当前城市的天气预报数据，初始为空数组
-- 状态 liveWeather: 当前城市的实时天气数据，初始为空对象
-- 状态 chartData: 用于图表展示的天气数据，初始为空对象
+2. Install dependencies:
 
-- 函数 setWeatherData(adcode):
+   ```bash
+   cd weather-app
+   npm install
+   ```
 
-  - 设置 loading 状态为 true
-  - 调用 获取天气预报(adcode) 获取天气预报数据
-  - 更新 currentWeather 状态
-  - 格式化 chartData 数据并更新状态
-  - 设置 loading 状态为 false
+3. Create a `.env` file in the root directory and add your AMap API key:
 
-- 函数 setLiveWeatherData(adcode):
+   ```
+   VUE_APP_AMAP_KEY=your_amap_api_key_here
+   ```
 
-  - 调用 获取实时天气(adcode) 获取实时天气数据
-  - 更新 liveWeather 状态
+4. Run the application:
 
-- 函数 addCity(城市信息):
+   ```bash
+   npm run serve
+   ```
 
-  - 如果城市已存在，则不添加
-  - 将城市信息添加到 cities 数组
-  - 将 cities 数组保存到 localStorage
+5. Open your browser and navigate to `http://localhost:8080` to view the app.
 
-- 函数 deleteCity(adcode):
+## Contributing
 
-  - 从 cities 数组中删除指定 adcode 的城市
-  - 将 cities 数组保存到 localStorage
-
-- 函数 initialize():
-
-  - 调用 获取位置信息() 获取用户当前位置
-  - 调用 setWeatherData() 获取当前位置的天气预报数据
-  - 调用 setLiveWeatherData() 获取当前位置的实时天气数据
-
-- 函数 searchCity(关键词):
-
-  - 调用 搜索城市(关键词) 搜索城市
-  - 返回搜索结果
-
-- 函数 getDayOfWeek(index):
-
-  - 根据索引计算星期几
-  - 返回星期几字符串
-
-- 函数 formatDate(日期字符串):
-
-  - 将日期字符串格式化为 MM-DD 格式
-  - 返回格式化后的日期字符串
-
-- 函数 formatWind(风力):
-  - 将风力等级格式化为更易读的字符串
-  - 返回格式化后的风力字符串
+Contributions are welcome! Please feel free to submit a pull request or open an issue for any bugs or feature requests.
