@@ -12,7 +12,7 @@
           type="text"
           placeholder="请输入城市名称"
           class="py-3 px-3 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none placeholder-text-3xl focus:shadow-md"
-          @input="handleSearch"
+          @input="debouncedHandleSearch"
         />
         <!-- 搜索结果列表 -->
         <div
@@ -103,6 +103,7 @@ import Header from '@/components/Header.vue'
 import CommonEcharts from '@/components/CommonEcharts.vue'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { useRouter } from 'vue-router' // 引入 useRouter
+import { debounce } from 'lodash'
 
 const weatherStore = useWeatherStore()
 const router = useRouter() // 创建 router 实例
@@ -165,6 +166,7 @@ const handleSearch = async () => {
     console.error('搜索城市时出错:', error)
   }
 }
+const debouncedHandleSearch = debounce(handleSearch, 300)
 
 // 处理城市选择逻辑
 const handleCitySelect = async (city) => {
