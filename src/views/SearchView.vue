@@ -1,4 +1,4 @@
-<!-- src/views/SearchView.vue -->
+// src/views/SearchView.vue
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <Header />

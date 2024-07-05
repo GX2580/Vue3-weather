@@ -1,13 +1,14 @@
+// src/stores/weatherStore.js
 import { defineStore } from 'pinia'
 import {
   getLocationInfo,
   getWeather,
   searchCity,
   getLiveWeather,
+  getGeocode, // 引入新的接口
 } from '@/api/weatherApi'
 
 // 从 localStorage 中读取城市列表，如果没有则初始化为空数组
-// 读取localstorage
 const storedCities = localStorage.getItem('cities')
 const initialCities = storedCities ? JSON.parse(storedCities) : []
 
@@ -26,6 +27,13 @@ export const useWeatherStore = defineStore('weather', {
     loading: false,
     error: null,
     city: '',
+    // 搜索结果
+    searchResult: {
+      adcode: null,
+      province: null,
+      city: null,
+      district: null,
+    },
   }),
   actions: {
     // 获取并设置天气数据(预报)
@@ -98,9 +106,63 @@ export const useWeatherStore = defineStore('weather', {
     // 搜索城市
     async searchCity(keywords) {
       try {
-        const res = await searchCity(keywords)
-        // 返回搜索结果
-        return res.data.districts[0]
+        // 使用新的接口获取城市信息
+        const res = await getGeocode(keywords)
+        if (res.data.status === '1') {
+          const geocode = res.data.geocodes[0]
+
+          // 根据level确定如何设置searchResult
+          switch (geocode.level) {
+            case '省':
+            case '市':
+              this.searchResult = {
+                adcode: geocode.adcode,
+                province: geocode.province,
+                city: geocode.city,
+                district: '', // 省市级没有区县，设置为空字符串
+                level: geocode.level,
+              }
+              break
+            case '区县':
+              this.searchResult = {
+                adcode: geocode.adcode,
+                province: geocode.province,
+                city: geocode.city,
+                district: geocode.district,
+                level: geocode.level,
+              }
+              break
+            case '乡镇':
+              // 获取乡镇所在区县的adcode
+              const districtRes = await getGeocode(geocode.district)
+              const districtAdcode = districtRes.data.geocodes[0].adcode
+
+              this.searchResult = {
+                adcode: districtAdcode, // 使用区县的adcode
+                province: geocode.province,
+                city: geocode.city,
+                district: geocode.district,
+                level: geocode.level,
+              }
+              break
+            default:
+              this.searchResult = {
+                adcode: null,
+                province: null,
+                city: null,
+                district: null,
+                level: null,
+              }
+          }
+        } else {
+          this.searchResult = {
+            adcode: null,
+            province: null,
+            city: null,
+            district: null,
+            level: null,
+          }
+        }
       } catch (error) {
         console.error('搜索城市失败：', error)
         throw error

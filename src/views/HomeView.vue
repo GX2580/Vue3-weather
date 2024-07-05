@@ -1,3 +1,4 @@
+// src/views/HomeView.vue
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <!-- 头部组件 -->
@@ -19,13 +20,21 @@
           class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[62px]"
         >
           <p v-if="networkError">对不起网络似乎出了点问题 请稍后再查询</p>
-          <p v-if="!networkError && !searchResult">似乎没有找到你查找的城市</p>
+          <p
+            v-else-if="
+              !networkError && !searchResult.adcode && searchQuery !== ''
+            "
+          >
+            似乎没有找到你查找的城市
+          </p>
           <div
-            v-if="!networkError && searchResult"
+            v-else-if="!networkError && searchResult.adcode"
             @click="handleCitySelect(searchResult)"
             class="cursor-pointer hover:bg-weather-primary p-2"
           >
-            {{ searchResult.name }}
+            {{
+              `${searchResult.province}${searchResult.city}${searchResult.district}`
+            }}
           </div>
         </div>
       </div>
@@ -109,12 +118,12 @@ const router = useRouter() // 创建 router 实例
 
 const searchQuery = ref('') // 搜索关键词
 const showSearchResults = ref(false) // 是否显示搜索结果
-const searchResult = ref(null) // 搜索结果
 const networkError = ref(false) // 是否出现网络错误
 
 // 获取天气数据
 const cities = computed(() => weatherStore.cities) // 城市列表
 const currentWeather = computed(() => weatherStore.currentWeather) // 当前位置天气预报
+const searchResult = computed(() => weatherStore.searchResult)
 
 // 使用 computed 计算当前位置的 chartData
 const currentCityChartData = computed(() => {
@@ -128,23 +137,27 @@ const currentCityChartData = computed(() => {
 })
 
 // 监听 cities 变化更新天气信息
-watch(cities, async () => {
-  // 使用 Promise.all 并行处理所有城市的实时天气更新
-  const updatePromises = cities.value.map(async (city) => {
-    try {
-      const liveWeather = await weatherStore.setLiveWeatherData(city.adcode)
-      // 使用获取到的实时天气更新 city.temp
-      city.temp = liveWeather.temperature
-    } catch (error) {
-      console.error('更新城市天气信息时出错:', error)
-    }
-  })
+watch(
+  cities,
+  async () => {
+    // 使用 Promise.all 并行处理所有城市的实时天气更新
+    const updatePromises = cities.value.map(async (city) => {
+      try {
+        const liveWeather = await weatherStore.setLiveWeatherData(city.adcode)
+        // 使用获取到的实时天气更新 city.temp
+        city.temp = liveWeather.temperature
+      } catch (error) {
+        console.error('更新城市天气信息时出错:', error)
+      }
+    })
 
-  await Promise.all(updatePromises)
+    await Promise.all(updatePromises)
 
-  // 更新 localStorage 中的 cities
-  weatherStore.saveCitiesToLocalStorage()
-})
+    // 更新 localStorage 中的 cities
+    weatherStore.saveCitiesToLocalStorage()
+  },
+  { deep: true }
+)
 
 // 获取实时温度
 const getLiveTemp = (adcode) => {
@@ -164,8 +177,7 @@ const handleSearch = async () => {
   showSearchResults.value = true
   networkError.value = false
   try {
-    const result = await weatherStore.searchCity(searchQuery.value)
-    searchResult.value = result
+    await weatherStore.searchCity(searchQuery.value)
   } catch (error) {
     networkError.value = true
     console.error('搜索城市时出错:', error)

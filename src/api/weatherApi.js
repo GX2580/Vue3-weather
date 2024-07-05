@@ -3,6 +3,7 @@ import axios from 'axios'
 
 // 获取API密钥
 const API_KEY = import.meta.env.VITE_AMAP_API_KEY
+
 // 设置基础URL
 const BASE_URL = 'https://restapi.amap.com/v3'
 
@@ -31,6 +32,7 @@ export const getWeather = (adcode) => {
     },
   })
 }
+
 // 获取实时天气
 export const getLiveWeather = (adcode) => {
   return weatherApi.get('/weather/weatherInfo', {
@@ -65,6 +67,16 @@ export const searchCityByAdcode = (adcode) => {
       // 获取当前行政区
       subdistrict: 0,
       extensions: 'base',
+    },
+  })
+}
+
+// 根据地址获取城市信息
+export const getGeocode = (address) => {
+  return axios.get(`${BASE_URL}/geocode/geo`, {
+    params: {
+      key: API_KEY,
+      address: address,
     },
   })
 }
