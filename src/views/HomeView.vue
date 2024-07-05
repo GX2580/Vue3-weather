@@ -1,4 +1,3 @@
-<!-- src/views/HomeView.vue -->
 <template>
   <div class="flex flex-col min-h-screen bg-weather-primary">
     <!-- 头部组件 -->
@@ -127,10 +126,11 @@ const currentCityChartData = computed(() => {
     nightTemps: forecasts.map((item) => item.nighttemp),
   }
 })
+
 // 监听 cities 变化更新天气信息
 watch(cities, async () => {
-  // 遍历 cities，为每个城市更新实时天气
-  for (const city of cities.value) {
+  // 使用 Promise.all 并行处理所有城市的实时天气更新
+  const updatePromises = cities.value.map(async (city) => {
     try {
       const liveWeather = await weatherStore.setLiveWeatherData(city.adcode)
       // 使用获取到的实时天气更新 city.temp
@@ -138,10 +138,14 @@ watch(cities, async () => {
     } catch (error) {
       console.error('更新城市天气信息时出错:', error)
     }
-  }
+  })
+
+  await Promise.all(updatePromises)
+
   // 更新 localStorage 中的 cities
   weatherStore.saveCitiesToLocalStorage()
 })
+
 // 获取实时温度
 const getLiveTemp = (adcode) => {
   const city = cities.value.find((city) => city.adcode === adcode)
@@ -150,6 +154,7 @@ const getLiveTemp = (adcode) => {
   }
   return 'N/A' // 如果没有找到城市，返回 N/A
 }
+
 // 处理搜索逻辑
 const handleSearch = async () => {
   if (searchQuery.value === '') {
