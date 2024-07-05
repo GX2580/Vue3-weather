@@ -141,11 +141,21 @@ export const useWeatherStore = defineStore('weather', {
     // 格式化风力
     formatWind(windPower) {
       if (!windPower) {
-        // 处理 windPower 为 undefined 的情况
         return 'N/A'
       }
-      const windPowerNumber = parseInt(windPower.replace('级', ''))
-      return `${windPowerNumber}-${windPowerNumber + 2}级`
+      // 提取所有数字
+      const windPowerNumbers = windPower.match(/\d+/g)
+
+      if (windPowerNumbers.length === 2) {
+        // 如果提取到两个数字，则返回 "x-y级" 格式
+        return `${windPowerNumbers[0]}-${windPowerNumbers[1]}级`
+      } else if (windPowerNumbers.length === 1) {
+        // 如果提取到一个数字，则返回 "x级" 格式
+        return `${windPowerNumbers[0]}级`
+      } else {
+        // 其他情况，返回原始值
+        return windPower
+      }
     },
   },
 })
