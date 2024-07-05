@@ -22,8 +22,8 @@
             {{ weatherStore.liveWeather.temperature }}℃
           </span>
           <span class="text-lg">
-            {{ weatherStore.liveWeather.winddirection }}
-            {{ weatherStore.liveWeather.windpower }}
+            {{ weatherStore.liveWeather.winddirection }}风
+            {{ weatherStore.liveWeather.windpower }}级
           </span>
         </div>
         <div v-else>Loading weather data...</div>
